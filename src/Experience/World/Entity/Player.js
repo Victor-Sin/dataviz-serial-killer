@@ -4,11 +4,8 @@ import Enemy from "./Enemies/Enemy";
 
 export default class Bullet
 {
-    static bulletFolder;
-    static meshGlobal;
-    static force = 0.1;
+    dashCooldown = 5;
     mesh = null;
-    enemy = null; //Objet appartient à la classe Enemy
 
     constructor(enemy = false)
     {
@@ -18,25 +15,17 @@ export default class Bullet
         this.time = this.experience.time
         this.debug = this.experience.debug
 
-        this.enemy = enemy;
 
         // Debug
         if(this.debug.active)
         {
-            if(!Bullet.bulletFolder) {
-                Bullet.bulletFolder = this.debug.ui.addFolder('bullets');
-                this.setGui();
-            };
+            this.debugFolder = this.debug.ui.addFolder('Player');
         }
 
         this.setMesh();
         this.setOrigin();
 
         this.scene.add(this.mesh)
-    }
-
-    setGui(){
-        Bullet.bulletFolder.add(Bullet,'force',0,10,1)
     }
 
     setMesh(){
