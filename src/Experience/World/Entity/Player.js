@@ -1,19 +1,21 @@
 import * as THREE from 'three'
 import Experience from '../../Experience'
-import Enemy from "./Enemies/Enemy";
+import getPhysicBody from "../../Utils/PhysicBody";
 
-export default class Bullet
+export default class Player
 {
     dashCooldown = 5;
     mesh = null;
+    health= 4;
 
-    constructor(enemy = false)
+    constructor()
     {
         this.experience = new Experience()
         this.scene = this.experience.scene
         this.resources = this.experience.resources
         this.time = this.experience.time
         this.debug = this.experience.debug
+        this.world = this.experience.physic.world
 
 
         // Debug
@@ -23,38 +25,19 @@ export default class Bullet
         }
 
         this.setMesh();
-        this.setOrigin();
 
         this.scene.add(this.mesh)
     }
 
     setMesh(){
-        if(Bullet.meshGlobal){
-            this.mesh = Bullet.meshGlobal.clone();
-        }
-        else{
-            const geometry = new THREE.PlaneGeometry(1,0.2);
-            const material = new THREE.MeshBasicMaterial();
-            material.side = THREE.DoubleSide;
-            Bullet.meshGlobal = new THREE.Mesh(geometry, material);
-            this.mesh = Bullet.meshGlobal.clone();
-        }
-    }
 
+        this.geometry = new THREE.BoxGeometry(1.5,1.75,1.5);
+        this.material = new THREE.MeshBasicMaterial();
+        this.mesh = new THREE.Mesh(this.geometry, this.material);
+        this.mesh.position.set(0, 1, 0);
 
-    /**
-     * Positionne le bullet à la position du lanceur et modifie son angle
-     */
-    setOrigin(){
-        this.mesh.position.set(this.enemy.position);
-        this.mesh.rotation.x = Math.PI/2;
+        getPhysicBody(this);
 
-        if(this.enemy instanceof Enemy){
-            this.mesh.rotation.z = Math.PI;
-        }
-        else{
-            this.mesh.rotation.z = Math.PI/2;
-        }
     }
 
     update()

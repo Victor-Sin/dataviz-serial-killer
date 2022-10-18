@@ -1,8 +1,13 @@
 import * as THREE from 'three'
 import Enemy from "./Enemy";
+import getPhysicBody from "../../../Utils/PhysicBody";
+import * as CANNON from "cannon-es";
 
 export default class EnemyVertical extends Enemy
 {
+    body;
+    shape;
+    shootingDelay = 1;
     constructor(name)
     {
         super(name);
@@ -10,11 +15,22 @@ export default class EnemyVertical extends Enemy
         // Debug
         if(this.debug.active)
         {
-            if(Enemy.enemiesFolder)  this.debugFolder  = this.debug.ui.addFolder('EnemyHorizontal');
+            if(Enemy.enemiesFolder)  this.debugFolder  = this.debug.ui.addFolder('EnemyVertical');
         }
 
-        const material = new THREE.MeshBasicMaterial();
-        this.mesh = new THREE.Mesh(Enemy.geometry, material);
+        this.setMesh();
+        this.scene.add(this.mesh)
+        // setInterval(() => this.shoot(this), this.shootingDelay*1000);
+    }
+
+    setMesh(){
+        this.material = new THREE.MeshBasicMaterial();
+        this.mesh = new THREE.Mesh(Enemy._geometry, this.material);
+        this.mesh.position.set(10, 1, 0);
+        this.mesh.rotation.y = Math.PI * 0.5;
+
+
+        getPhysicBody(this);
     }
 
     update()

@@ -3,6 +3,9 @@ import Environment from './Environment.js'
 import Floor from './Floor.js'
 import Fox from './Fox.js'
 import Bullet from "./Entity/Bullet";
+import EnemyHorizontal from "./Entity/Enemies/EnemyHorizontal";
+import EnemyVertical from "./Entity/Enemies/EnemyVertical";
+import Player from "./Entity/Player";
 
 export default class World
 {
@@ -16,11 +19,13 @@ export default class World
         this.resources.on('ready', () =>
         {
             // Setup
-            this.floor = new Floor()
+            // this.floor = new Floor()
             // this.fox = new Fox()
             this.environment = new Environment()
-            this.bullet = new Bullet()
-            this.bullets = new Bullet(true)
+            this.enemyHorizontal = new EnemyHorizontal();
+            this.enemyVertical = new EnemyVertical();
+            // this.player = new Player();
+
 
         })
     }
@@ -28,6 +33,6 @@ export default class World
     update()
     {
         if(this.fox)
-            this.fox.update()
+            this.fox.update();
     }
 }

@@ -7,8 +7,10 @@ import Camera from './Camera.js'
 import Renderer from './Renderer.js'
 import World from './World/World.js'
 import Resources from './Utils/Resources.js'
+import Physic from './Physic/Physic'
 
 import sources from './sources.js'
+import Stats from "stats.js";
 
 let instance = null
 
@@ -38,6 +40,10 @@ export default class Experience
         this.camera = new Camera()
         this.renderer = new Renderer()
         this.world = new World()
+        this.physic = new Physic();
+        this.stats = new Stats()
+        this.stats.showPanel(0) // 0: fps, 1: ms, 2: mb, 3+: custom
+        document.body.appendChild(this.stats.dom)
 
         // Resize event
         this.sizes.on('resize', () =>
@@ -60,9 +66,12 @@ export default class Experience
 
     update()
     {
+        this.stats.begin()
         this.camera.update()
         this.world.update()
         this.renderer.update()
+        this.physic.update()
+        this.stats.end()
     }
 
     destroy()

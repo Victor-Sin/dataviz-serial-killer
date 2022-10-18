@@ -1,13 +1,15 @@
 import * as THREE from 'three'
 import Experience from '../../Experience'
 import Enemy from "./Enemies/Enemy";
+import getPhysicBody from "../../Utils/PhysicBody";
+import EnemyVertical from "./Enemies/EnemyVertical";
 
 export default class Bullet
 {
     static bulletFolder;
     static meshGlobal;
     static force = 0.1;
-    mesh = null;
+    mesh ;
     enemy = null; //Objet appartient à la classe Enemy
 
     constructor(enemy = false)
@@ -17,6 +19,7 @@ export default class Bullet
         this.resources = this.experience.resources
         this.time = this.experience.time
         this.debug = this.experience.debug
+        this.world = this.experience.physic.world
 
         this.enemy = enemy;
 
@@ -30,8 +33,8 @@ export default class Bullet
         }
 
         this.setMesh();
-        this.setOrigin();
 
+        console.log(this.mesh)
         this.scene.add(this.mesh)
     }
 
@@ -40,16 +43,14 @@ export default class Bullet
     }
 
     setMesh(){
-        if(Bullet.meshGlobal){
-            this.mesh = Bullet.meshGlobal.clone();
-        }
-        else{
-            const geometry = new THREE.PlaneGeometry(1,0.2);
+        if(!Bullet.meshGlobal){
+            const geometry = new THREE.BoxGeometry(0.75,0.25,0.25);
             const material = new THREE.MeshBasicMaterial();
-            material.side = THREE.DoubleSide;
             Bullet.meshGlobal = new THREE.Mesh(geometry, material);
-            this.mesh = Bullet.meshGlobal.clone();
         }
+        this.mesh = Bullet.meshGlobal.clone();
+        this.setOrigin();
+        getPhysicBody(this);
     }
 
 
@@ -57,15 +58,16 @@ export default class Bullet
      * Positionne le bullet à la position du lanceur et modifie son angle
      */
     setOrigin(){
-        this.mesh.position.set(this.enemy.position);
+        this.mesh.position.set(this.enemy.mesh.position.clone());
         this.mesh.rotation.x = Math.PI/2;
 
-        if(this.enemy instanceof Enemy){
+        if(this.enemy instanceof EnemyVertical){
             this.mesh.rotation.z = Math.PI;
         }
         else{
             this.mesh.rotation.z = Math.PI/2;
         }
+
     }
 
     update()

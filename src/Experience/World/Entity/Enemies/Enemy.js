@@ -12,13 +12,15 @@ export default class Enemy
     mesh;
     material;
 
-    constructor(name)
+    constructor()
     {
         this.experience = new Experience()
         this.scene = this.experience.scene
         this.resources = this.experience.resources
         this.time = this.experience.time
         this.debug = this.experience.debug
+        this.world = this.experience.physic.world;
+        this.physic = this.experience.physic;
 
 
         // Debug
@@ -31,7 +33,7 @@ export default class Enemy
         }
 
         if(!Enemy._geometry){
-            Enemy._geometry = new THREE.BoxBufferGeometry(2,1,1)
+            Enemy._geometry = new THREE.BoxGeometry(2,1,1)
         }
     }
 
@@ -43,7 +45,6 @@ export default class Enemy
 
     shoot(){
         const bullet = new Bullet(this);
-        this.experience.scene.add(bullet)
     }
 
     update()

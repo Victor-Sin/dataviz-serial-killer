@@ -1,8 +1,10 @@
 import * as THREE from 'three'
 import Experience from '../Experience.js'
+import * as CANNON from 'cannon-es';
 
 export default class Floor
 {
+    shape;
     constructor()
     {
         this.experience = new Experience()
@@ -50,5 +52,16 @@ export default class Floor
         this.mesh.rotation.x = - Math.PI * 0.5
         this.mesh.receiveShadow = true
         this.scene.add(this.mesh)
+
+        let world = this.experience.physic.world;
+
+        this.shape = new CANNON.Plane();
+        this.body = new CANNON.Body();
+
+        this.body.mass = 0;
+        this.body.addShape(this.shape);
+        world.addBody(this.body);
+        this.body.quaternion.setFromAxisAngle(new CANNON.Vec3(- 1, 0, 0), Math.PI * 0.5)
+
     }
 }
