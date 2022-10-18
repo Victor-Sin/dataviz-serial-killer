@@ -15,7 +15,11 @@ export default class EnemyVertical extends Enemy
         // Debug
         if(this.debug.active)
         {
-            if(Enemy.enemiesFolder)  this.debugFolder  = this.debug.ui.addFolder('EnemyVertical');
+            if(Enemy.enemiesFolder)  this.debugFolder = Enemy.enemiesFolder.addFolder('EnemyVertical');
+            this.debugFolder.close();
+
+            this.setGui();
+
         }
 
         this.setMesh();
@@ -29,8 +33,14 @@ export default class EnemyVertical extends Enemy
         this.mesh.position.set(10, 1, 0);
         this.mesh.rotation.y = Math.PI * 0.5;
 
-
         getPhysicBody(this);
+    }
+
+    setGui(){
+        if(this.debugFolder){
+            this.debugFolder.add(this,'force',0,10,0.1)
+            this.debugFolder.add(this,'shootingDelay',0,5,0.01);
+        }
     }
 
     update()

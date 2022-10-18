@@ -7,8 +7,9 @@ export default class Enemy
     static bombCooldown = 5;
     static blocCooldown = 5;
     static enemiesFolder;
+    static folderEnemiesSet = false;
     static geometry;
-    static force = 5;
+    force = 5;
     mesh;
     material;
 
@@ -26,9 +27,11 @@ export default class Enemy
         // Debug
         if(this.debug.active)
         {
-            if(!Enemy.enemiesFolder){
-                Enemy.enemiesFolder = this.debug.ui.addFolder('enemies');
-                this.setGui();
+            if(!Enemy.folderEnemiesSet){
+                Enemy.enemiesFolder = this.debug.ui.addFolder('Enemies');
+                Enemy.enemiesFolder.close();
+                Enemy.folderEnemiesSet = true;
+                this.setGuiGlobal();
             };
         }
 
@@ -37,10 +40,9 @@ export default class Enemy
         }
     }
 
-    setGui(){
+    setGuiGlobal(){
         Enemy.enemiesFolder.add(Enemy,'bombCooldown',0,10,1)
         Enemy.enemiesFolder.add(Enemy,'blocCooldown',0,10,1)
-        Enemy.enemiesFolder.add(this,'force',0,10,0.1)
     }
 
     shoot(){

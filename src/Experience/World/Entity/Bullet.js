@@ -7,6 +7,7 @@ import EnemyVertical from "./Enemies/EnemyVertical";
 export default class Bullet
 {
     static bulletFolder;
+    static folderBulletSet = false;
     static meshGlobal;
     static force = 0.1;
     mesh ;
@@ -26,8 +27,9 @@ export default class Bullet
         // Debug
         if(this.debug.active)
         {
-            if(!Bullet.bulletFolder) {
+            if(!Bullet.folderBulletSet) {
                 Bullet.bulletFolder = this.debug.ui.addFolder('bullets');
+                Bullet.folderBulletSet = true;
                 this.setGui();
             };
         }

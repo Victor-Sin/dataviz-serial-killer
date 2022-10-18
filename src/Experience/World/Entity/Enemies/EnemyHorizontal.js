@@ -8,7 +8,7 @@ export default class EnemyHorizontal extends Enemy
     shape;
     body;
     mesh;
-    shootingDelay = 1;
+    shootingDelay = 0.5;
     constructor()
     {
         super();
@@ -16,7 +16,9 @@ export default class EnemyHorizontal extends Enemy
         // Debug
         if(this.debug.active)
         {
-            if(Enemy.enemiesFolder)  this.debugFolder  = this.debug.ui.addFolder('EnemyHorizontal');
+            if(Enemy.enemiesFolder)  this.debugFolder  = Enemy.enemiesFolder.addFolder('EnemyHorizontal');
+            this.debugFolder.close();
+            this.setGui()
         }
 
         this.setMesh();
@@ -31,6 +33,13 @@ export default class EnemyHorizontal extends Enemy
         this.mesh.position.set(0, 1, -10);
 
         getPhysicBody(this);
+    }
+
+    setGui(){
+        if(this.debugFolder){
+            this.debugFolder.add(this,'force',0,10,0.1)
+            this.debugFolder.add(this,'shootingDelay',0,5,0.01);
+        }
     }
 
     update()

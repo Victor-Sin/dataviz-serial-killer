@@ -19,12 +19,12 @@ export default class World
         this.resources.on('ready', () =>
         {
             // Setup
-            // this.floor = new Floor()
+            this.floor = new Floor()
             // this.fox = new Fox()
             this.environment = new Environment()
             this.enemyHorizontal = new EnemyHorizontal();
             this.enemyVertical = new EnemyVertical();
-            // this.player = new Player();
+            this.player = new Player();
 
 
         })

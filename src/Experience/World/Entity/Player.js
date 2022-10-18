@@ -22,6 +22,7 @@ export default class Player
         if(this.debug.active)
         {
             this.debugFolder = this.debug.ui.addFolder('Player');
+            this.debugFolder.close();
         }
 
         this.setMesh();
