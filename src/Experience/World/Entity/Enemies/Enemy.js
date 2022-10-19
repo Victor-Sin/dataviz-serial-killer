@@ -45,12 +45,15 @@ export default class Enemy
         Enemy.enemiesFolder.add(Enemy,'blocCooldown',0,10,1)
     }
 
-    shoot(){
-        const bullet = new Bullet(this);
+    static shoot(enemy){
+        const bullet = new Bullet(enemy);
     }
 
     update()
     {
-        this.animation.mixer.update(this.time.delta * 0.001)
+        if(this.body && this.mesh){
+            this.mesh.position.copy(this.body.position)
+            this.mesh.quaternion.copy(this.body.quaternion)
+        }
     }
 }

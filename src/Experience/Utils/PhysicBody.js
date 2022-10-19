@@ -7,18 +7,17 @@ import * as THREE from "three";
  * @param self
  * @param mass
  */
-export default function getPhysicBody(self, mass = 0,geometryName = '') {
+export default function getPhysicBody(self, mass = 0,geometryName = '',materialName = 'default') {
     self.shape = createShape(self.mesh.geometry,geometryName)
     self.body =  new CANNON.Body({
         mass:mass,
         position: self.mesh.position.clone(),
         shape : self.shape,
-        material: new CANNON.Material('default')
+        material: new CANNON.Material(materialName)
     })
     self.body.quaternion.copy(self.mesh.quaternion)
 
     self.world.addBody(self.body);
-    self.experience.physic.addObjectToUpdate({mesh : self.mesh, body : self.body})
 }
 
 /**

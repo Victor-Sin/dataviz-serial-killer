@@ -8,7 +8,7 @@ export default class EnemyHorizontal extends Enemy
     shape;
     body;
     mesh;
-    shootingDelay = 0.5;
+    shootingDelay = 1;
     constructor()
     {
         super();
@@ -24,13 +24,15 @@ export default class EnemyHorizontal extends Enemy
         this.setMesh();
 
         this.scene.add(this.mesh)
-        // setInterval(() => this.shoot(this), this.shootingDelay*1000);
+        // setTimeout( () => this.shoot(this),this.shootingDelay*1000)
     }
 
     setMesh(){
         this.material = new THREE.MeshBasicMaterial();
         this.mesh = new THREE.Mesh(Enemy._geometry, this.material);
         this.mesh.position.set(0, 1, -10);
+        // this.mesh.visible = false;
+
 
         getPhysicBody(this);
     }
@@ -45,5 +47,6 @@ export default class EnemyHorizontal extends Enemy
     update()
     {
         super.update();
+
     }
 }

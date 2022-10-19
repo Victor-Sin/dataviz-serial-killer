@@ -7,7 +7,7 @@ export default class EnemyVertical extends Enemy
 {
     body;
     shape;
-    shootingDelay = 1;
+    shootingDelay = 0.33;
     constructor(name)
     {
         super(name);
@@ -24,7 +24,6 @@ export default class EnemyVertical extends Enemy
 
         this.setMesh();
         this.scene.add(this.mesh)
-        // setInterval(() => this.shoot(this), this.shootingDelay*1000);
     }
 
     setMesh(){
@@ -32,6 +31,7 @@ export default class EnemyVertical extends Enemy
         this.mesh = new THREE.Mesh(Enemy._geometry, this.material);
         this.mesh.position.set(10, 1, 0);
         this.mesh.rotation.y = Math.PI * 0.5;
+        // this.mesh.visible = false;
 
         getPhysicBody(this);
     }
@@ -46,6 +46,5 @@ export default class EnemyVertical extends Enemy
     update()
     {
         super.update();
-        this.animation.mixer.update(this.time.delta * 0.001)
     }
 }

@@ -5,7 +5,6 @@ import getPhysicBody from "../../Utils/PhysicBody";
 export default class Player
 {
     dashCooldown = 5;
-    mesh = null;
     health= 4;
 
     constructor()
@@ -37,12 +36,15 @@ export default class Player
         this.mesh = new THREE.Mesh(this.geometry, this.material);
         this.mesh.position.set(0, 1, 0);
 
-        getPhysicBody(this);
+        getPhysicBody(this,100000000);
 
     }
 
     update()
     {
-        this.animation.mixer.update(this.time.delta * 0.001)
+        if(this.body && this.mesh){
+            this.mesh.position.copy(this.body.position)
+            this.mesh.quaternion.copy(this.body.quaternion)
+        }
     }
 }

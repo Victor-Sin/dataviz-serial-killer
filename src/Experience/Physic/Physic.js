@@ -8,6 +8,7 @@ export default class Physic
 {
     world;
     objectsToUpdate = [];
+    toDestroy;
     constructor()
     {
         this.experience = new Experience()
@@ -15,15 +16,19 @@ export default class Physic
         this.resources = this.experience.resources
 
         this.world = new CANNON.World();
-        this.world.gravity.set(0,-9.82,0);
+        this.world.gravity.set(0,0,0);
+        this.world.broadphase = new CANNON.SAPBroadphase(this.world)
+
 
         this.cannonDebugger = new CannonDebugger(this.scene, this.world, {
             // options...
         })
+
     }
 
     addObjectToUpdate(object){
         this.objectsToUpdate.push(object)
+        return this.objectsToUpdate.length-1;
     }
 
 

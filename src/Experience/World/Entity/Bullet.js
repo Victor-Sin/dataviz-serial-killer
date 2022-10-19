@@ -3,15 +3,21 @@ import Experience from '../../Experience'
 import Enemy from "./Enemies/Enemy";
 import getPhysicBody from "../../Utils/PhysicBody";
 import EnemyVertical from "./Enemies/EnemyVertical";
+import * as CANNON from "cannon-es";
+
 
 export default class Bullet
 {
+    static bullets = [];
     static bulletFolder;
     static folderBulletSet = false;
     static meshGlobal;
-    static force = 0.1;
+    static force = 1000;
+    toRemove = false;
     mesh ;
     enemy = null; //Objet appartient à la classe Enemy
+    body;
+    shape;
 
     constructor(enemy = false)
     {
@@ -21,8 +27,12 @@ export default class Bullet
         this.time = this.experience.time
         this.debug = this.experience.debug
         this.world = this.experience.physic.world
+        this.physic = this.experience.physic
+
 
         this.enemy = enemy;
+
+        this.setMesh();
 
         // Debug
         if(this.debug.active)
@@ -34,14 +44,17 @@ export default class Bullet
             };
         }
 
-        this.setMesh();
+        Bullet.bullets.push(this)
 
-        console.log(this.mesh)
         this.scene.add(this.mesh)
     }
 
     setGui(){
         Bullet.bulletFolder.add(Bullet,'force',0,10,1)
+        Bullet.bulletFolder.add(this.mesh.position,"x",-15,15,0.1)
+        Bullet.bulletFolder.add(this.mesh.position,"y",-15,15,0.1)
+        Bullet.bulletFolder.add(this.mesh.position,"z",-15,15,0.1)
+
     }
 
     setMesh(){
@@ -52,7 +65,9 @@ export default class Bullet
         }
         this.mesh = Bullet.meshGlobal.clone();
         this.setOrigin();
-        getPhysicBody(this);
+
+        this.index = getPhysicBody(this,1,'','bullet');
+        this.setImpulsion()
     }
 
 
@@ -60,20 +75,67 @@ export default class Bullet
      * Positionne le bullet à la position du lanceur et modifie son angle
      */
     setOrigin(){
-        this.mesh.position.set(this.enemy.mesh.position.clone());
-        this.mesh.rotation.x = Math.PI/2;
+        const {x,y,z } = this.enemy.mesh.position.clone();
+        const depthEnemy = this.enemy.mesh.geometry.parameters.depth/2;
+        const widthThisMesh = this.mesh.geometry.parameters.width/2;
+        const posX = this.enemy instanceof EnemyVertical ? x - depthEnemy - widthThisMesh -0.1   : x;
+        const posY = y
+        const posZ = this.enemy instanceof EnemyVertical ? z  : z + depthEnemy + widthThisMesh +0.1;
+
+
+
+        this.mesh.position.set(posX,posY,posZ);
 
         if(this.enemy instanceof EnemyVertical){
             this.mesh.rotation.z = Math.PI;
         }
         else{
-            this.mesh.rotation.z = Math.PI/2;
+            this.mesh.rotation.y = Math.PI/2;
         }
+    }
+
+    setImpulsion(){
+        const widthThisMesh = this.mesh.geometry.parameters.width/2;
+        const depthThisMesh = this.mesh.geometry.parameters.depth/2;
+        let topPoint;
+        let impulse;
+        if(this.enemy instanceof EnemyVertical){
+             topPoint = new CANNON.Vec3(widthThisMesh, 0, 0)
+             impulse = new CANNON.Vec3(-Bullet.force*1/60,0 , 0)
+        }
+        else{
+             topPoint = new CANNON.Vec3(0, 0, depthThisMesh)
+             impulse = new CANNON.Vec3(0,0, Bullet.force*1/60)
+        }
+        if(this.body){
+
+        }
+        this.body.applyImpulse(impulse,topPoint)
+
+        this.eventCollider = this.body.addEventListener("collide", (e) => {
+            console.log(e.contact.bj.material.name)
+
+            if(e.contact.bj.material.name !== 'bullet')
+            this.toRemove = true;
+
+        })
 
     }
 
     update()
     {
-        this.animation.mixer.update(this.time.delta * 0.001)
+        if(this.body && this.mesh && !this.toRemove){
+            this.mesh.position.copy(this.body.position)
+            this.mesh.quaternion.copy(this.body.quaternion)
+        }
+        if(this.toRemove){
+            this.world.removeBody(this.body);
+            this.body.removeEventListener('collide',this.eventCollider)
+
+            this.scene.remove(this.mesh)
+            this.mesh.material.dispose()
+            this.mesh.geometry.dispose()
+        }
+
     }
 }
