@@ -2,6 +2,7 @@ import * as THREE from 'three'
 import Experience from '../../Experience'
 import getPhysicBody from "../../Utils/PhysicBody";
 
+
 export default class Player
 {
     dashCooldown = 5;
@@ -16,15 +17,17 @@ export default class Player
         this.debug = this.experience.debug
         this.world = this.experience.physic.world
 
-
+        this.setMesh();
+        
         // Debug
         if(this.debug.active)
         {
             this.debugFolder = this.debug.ui.addFolder('Player');
             this.debugFolder.close();
+            this.setGui();
+
         }
 
-        this.setMesh();
 
         this.scene.add(this.mesh)
     }
@@ -39,12 +42,23 @@ export default class Player
         getPhysicBody(this,100000000);
 
     }
+    setGui(){
+        if(this.debugFolder){
+            //add position
+            this.debugFolder.add(this.mesh.position,'x',-10,10,0.01)
+            this.debugFolder.add(this.mesh.position,'y',-10,10,0.01)
+            this.debugFolder.add(this.mesh.position,'z',-10,10,0.01)
+        }
+    }
 
     update()
     {
         if(this.body && this.mesh){
             this.mesh.position.copy(this.body.position)
             this.mesh.quaternion.copy(this.body.quaternion)
+           
+            // console.log(this.mesh.position);
         }
+
     }
 }
