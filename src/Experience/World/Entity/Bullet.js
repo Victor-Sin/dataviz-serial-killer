@@ -113,7 +113,7 @@ export default class Bullet
         this.body.applyImpulse(impulse,topPoint)
 
         this.eventCollider = this.body.addEventListener("collide", (e) => {
-            console.log(e.contact.bj.material.name)
+            // console.log(e.contact.bj.material.name)
 
             if(e.contact.bj.material.name !== 'bullet')
             this.toRemove = true;
