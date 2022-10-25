@@ -23,10 +23,10 @@ export default class World
             this.floor = new Floor()
             // this.fox = new Fox()
             this.environment = new Environment()
-            this.enemyHorizontal = new EnemyHorizontal();
-            this.enemyVertical = new EnemyVertical();
             this.player = new Player();
             Enemy.setPlayer(this.player);
+            this.enemyHorizontal = new EnemyHorizontal();
+            this.enemyVertical = new EnemyVertical();
             setInterval(() => {
                 Enemy.shoot(this.enemyHorizontal)
                 Enemy.shoot(this.enemyVertical)

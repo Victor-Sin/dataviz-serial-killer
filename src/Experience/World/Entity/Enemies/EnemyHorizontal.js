@@ -2,6 +2,7 @@ import * as THREE from 'three'
 import Enemy from "./Enemy";
 import * as CANNON from "cannon-es";
 import getPhysicBody from "../../../Utils/PhysicBody";
+import { Clock } from 'three';
 
 export default class EnemyHorizontal extends Enemy
 {
@@ -20,11 +21,25 @@ export default class EnemyHorizontal extends Enemy
             this.debugFolder.close();
             this.setGui()
         }
-
+        this.clock = new THREE.Clock();
         this.setMesh();
+        this.enemyHorizontalMove();
 
         this.scene.add(this.mesh)
         // setTimeout( () => this.shoot(this),this.shootingDelay*1000)
+    }
+
+    enemyHorizontalMove(){
+        const playerBody = Enemy.player.body;
+        console.log(playerBody.position.x);
+        const enemyBody = this.body;
+        let delta = this.clock.getDelta();
+        let playerBodyX = new THREE.Vector3(playerBody.position.x, enemyBody.position.y, enemyBody.position.z);
+        enemyBody.position.copy(playerBodyX);
+        // console.log(enemyBody.position);
+    
+       
+      
     }
 
     setMesh(){
@@ -37,6 +52,9 @@ export default class EnemyHorizontal extends Enemy
         getPhysicBody(this,{
             mass: 1000,
             type: 2,
+            collisionFilterGroup: 3,
+            collisionFilterMask: 4,
+
         });
     }
 
@@ -50,6 +68,6 @@ export default class EnemyHorizontal extends Enemy
     update()
     {
         super.update();
-
+        this.enemyHorizontalMove();
     }
 }

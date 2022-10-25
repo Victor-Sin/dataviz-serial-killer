@@ -39,7 +39,9 @@ export default class Enemy
         if(!Enemy._geometry){
             Enemy._geometry = new THREE.BoxGeometry(2,1,1)
         }
+
     }
+
 
     setGuiGlobal(){
         Enemy.enemiesFolder.add(Enemy,'bombCooldown',0,10,1)

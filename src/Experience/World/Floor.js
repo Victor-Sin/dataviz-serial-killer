@@ -15,6 +15,37 @@ export default class Floor
         this.setTextures()
         this.setMaterial()
         this.setMesh()
+        this.setWalls()
+    }
+
+    setWalls(){
+        let world = this.experience.physic.world;
+        let wallShape = new CANNON.Box(new CANNON.Vec3(0.5, 10, 10));
+        let wallBody = new CANNON.Body({ mass: 0
+        ,collisionFilterGroup:2 });
+        wallBody.addShape(wallShape);
+        wallBody.position.set(10, 0, 0);
+        world.addBody(wallBody);
+
+        let wallShape2 = new CANNON.Box(new CANNON.Vec3(0.5, 10, 10));
+        let wallBody2 = new CANNON.Body({ mass: 0
+        ,collisionFilterGroup:2 });
+        wallBody2.addShape(wallShape2);
+        wallBody2.position.set(-10, 0, 0);
+        world.addBody(wallBody2);
+
+        let wallShape3 = new CANNON.Box(new CANNON.Vec3(10, 10, 0.5));
+        let wallBody3 = new CANNON.Body({ mass: 0
+        ,collisionFilterGroup:2 });
+        wallBody3.addShape(wallShape3);
+        wallBody3.position.set(0, 0, 10);
+        world.addBody(wallBody3);
+
+        let wallShape4 = new CANNON.Box(new CANNON.Vec3(10, 10, 0.5));
+        let wallBody4 = new CANNON.Body({ mass: 0 });
+        wallBody4.addShape(wallShape4);
+        wallBody4.position.set(0, 0, -10);
+        world.addBody(wallBody4);
     }
 
     setGeometry()

@@ -116,7 +116,7 @@ export default class Bullet
         this.eventCollider = this.body.addEventListener("collide", (e) => {
             // console.log(e.contact.bj.material.name)
 
-            if(e.contact.bj.material.name !== 'bullet')
+            if(e.contact.bj.material?.name !== 'bullet')
             this.toRemove = true;
 
         })
