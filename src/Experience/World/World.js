@@ -32,10 +32,12 @@ export default class World
 
     initEnemies() {
         this.enemyHorizontal = new EnemyHorizontal();
-        this.enemyVertical = new EnemyVertical();
+        this.enemyVertical = new EnemyVertical()
+
         setInterval(() => {
             Enemy.shoot(this.enemyHorizontal)
         }, this.enemyHorizontal.getShootingDelay());
+
         setInterval(() => {
             Enemy.shoot(this.enemyVertical)
         }, this.enemyVertical.getShootingDelay());

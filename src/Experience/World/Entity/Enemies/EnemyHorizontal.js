@@ -1,8 +1,6 @@
 import * as THREE from 'three'
 import Enemy from "./Enemy";
-import * as CANNON from "cannon-es";
 import getPhysicBody from "../../../Utils/PhysicBody";
-import { Clock } from 'three';
 import BodyTypes from "../../../Utils/BodyTypes";
 
 export default class EnemyHorizontal extends Enemy
@@ -10,7 +8,7 @@ export default class EnemyHorizontal extends Enemy
     shape;
     body;
     mesh;
-    shootingDelay = 1;
+    shootingDelay = 2;
     orientation = 'x';
 
     constructor()

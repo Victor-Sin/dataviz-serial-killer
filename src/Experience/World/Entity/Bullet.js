@@ -19,7 +19,7 @@ export default class Bullet extends Entity {
     body;
     shape;
 
-    constructor(enemy = false)
+    constructor(enemy)
     {
         super();
         this.enemy = enemy;
@@ -57,12 +57,14 @@ export default class Bullet extends Entity {
         }
         this.mesh = Bullet.meshGlobal.clone();
         this.setOrigin();
+        const instanceVertical = this.enemy instanceof EnemyVertical
+        this.selfGroup = instanceVertical ? BodyTypes.BULLETS_1 : BodyTypes.BULLETS_2;
+        this.filterGroup = instanceVertical ? BodyTypes.BULLETS_2 : BodyTypes.BULLETS_1;
 
         this.index = getPhysicBody(this,{
             mass: 0.01,
-            collisionFilterGroup: BodyTypes.BULLETS,
-            collisionFilterMask:  BodyTypes.PLAYER | BodyTypes.OTHERS
-
+            collisionFilterGroup: this.selfGroup,
+            collisionFilterMask: this.selfGroup | BodyTypes.PLAYER | BodyTypes.OTHERS
         },'','bullet');
         this.setImpulsion()
     }
@@ -107,9 +109,7 @@ export default class Bullet extends Entity {
         this.body.applyForce(impulse,topPoint)
 
         this.eventCollider = this.body.addEventListener("collide", (e) => {
-            // console.log(e.contact.bj.material.name)
-
-            if(e.contact.bj.material?.name !== 'bullet')
+            if(e.contact.bj.collisionFilterGroup !== this.filterGroup)
             this.toRemove = true;
 
         })

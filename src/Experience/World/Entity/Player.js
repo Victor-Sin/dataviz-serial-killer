@@ -43,7 +43,7 @@ export default class Player extends Entity {
             fixedRotation : true,
             linearDamping : 0.85,
             collisionFilterGroup: BodyTypes.PLAYER,
-            collisionFilterMask:  BodyTypes.BULLETS | BodyTypes.OTHERS
+            collisionFilterMask:  BodyTypes.BULLETS_1 | BodyTypes.BULLETS_2 | BodyTypes.OTHERS
 
         });
 
@@ -69,22 +69,18 @@ export default class Player extends Entity {
         if (this.keyboard.pressed("left") || this.keyboard.pressed("q")) {
             impulse = new CANNON.Vec3(-moveDistance,- 9.82*delta, 0)
             this.body.applyImpulse(impulse,topPoint)
-            // this.body.position.x -= 12*delta;
         }
         if (this.keyboard.pressed("right") || this.keyboard.pressed("d")) {
             impulse = new CANNON.Vec3(moveDistance,- 9.82*delta, 0)
             this.body.applyImpulse(impulse,topPoint)
-            // this.body.position.x += moveDistance;
         }
         if (this.keyboard.pressed("up") || this.keyboard.pressed("z")) {
             impulse = new CANNON.Vec3(0,- 9.82*delta, -moveDistance)
             this.body.applyImpulse(impulse,topPoint)
-            // this.body.position.z -= moveDistance;
         }
         if (this.keyboard.pressed("down") || this.keyboard.pressed("s")) {
             impulse = new CANNON.Vec3(0,- 9.82*delta, moveDistance)
             this.body.applyImpulse(impulse,topPoint)
-            // this.body.position.z += moveDistance;
         }
     }
 
