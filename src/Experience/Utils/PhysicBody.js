@@ -1,11 +1,14 @@
 import * as CANNON from "cannon-es";
 import * as THREE from "three";
+import BodyTypes from "./BodyTypes";
 
 /**
  * Récupère l'object courrant, l'ajoute dans le monde physique l'équivalent de l'objet courrant et lie la position des objets
  *
- * @param self
- * @param mass
+ * @param self CURRENT OBJECT
+ * @param propetiesObj MODIFY BODY PROPETIES
+ * @param geometryName GEOMETRY NAME (REPLACE)
+ * @param materialName
  */
 export default function getPhysicBody(self, propetiesObj = {mass: 1},geometryName = '',materialName = 'default') {
     self.shape = createShape(self.mesh.geometry,geometryName)
@@ -13,6 +16,7 @@ export default function getPhysicBody(self, propetiesObj = {mass: 1},geometryNam
         position: self.mesh.position.clone(),
         shape : self.shape,
         material: new CANNON.Material(materialName),
+        collisionFilterGroup: BodyTypes.OTHERS,
         ...propetiesObj,
 
     })
@@ -27,6 +31,7 @@ export default function getPhysicBody(self, propetiesObj = {mass: 1},geometryNam
  * Si la geometry est plus complexe et qu'on souhaite une forme simple comme box physique on peut imposer une shape
  *
  * @param geometry
+ * @param geometryName
  * @returns {module:shapes/Shape.Shape}
  */
 function createShape(geometry,geometryName = ''){

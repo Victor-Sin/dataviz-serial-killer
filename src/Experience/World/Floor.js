@@ -1,6 +1,7 @@
 import * as THREE from 'three'
 import Experience from '../Experience.js'
 import * as CANNON from 'cannon-es';
+import BodyTypes from "../Utils/BodyTypes";
 
 export default class Floor
 {
@@ -10,42 +11,43 @@ export default class Floor
         this.experience = new Experience()
         this.scene = this.experience.scene
         this.resources = this.experience.resources
+        this.world = this.experience.physic.world;
+
 
         this.setGeometry()
         this.setTextures()
         this.setMaterial()
         this.setMesh()
-        this.setWalls()
     }
 
     setWalls(){
-        let world = this.experience.physic.world;
-        let wallShape = new CANNON.Box(new CANNON.Vec3(0.5, 10, 10));
-        let wallBody = new CANNON.Body({ mass: 0
-        ,collisionFilterGroup:2 });
-        wallBody.addShape(wallShape);
-        wallBody.position.set(10, 0, 0);
-        world.addBody(wallBody);
+        //INIT
+        const options = {
+            mass: 0,
+            collisionFilterGroup: BodyTypes.OTHERS,
+        };
+        const horizontalWall =  new CANNON.Box(new CANNON.Vec3(10, 10, 0.1));
+        const verticalWall =  new CANNON.Box(new CANNON.Vec3(0.1, 10, 10));
 
-        let wallShape2 = new CANNON.Box(new CANNON.Vec3(0.5, 10, 10));
-        let wallBody2 = new CANNON.Body({ mass: 0
-        ,collisionFilterGroup:2 });
-        wallBody2.addShape(wallShape2);
-        wallBody2.position.set(-10, 0, 0);
-        world.addBody(wallBody2);
+        const wallLeft = new CANNON.Body(options);
+        wallLeft.addShape(verticalWall);
+        wallLeft.position.set(-10, 0, 0);
+        this.world.addBody(wallLeft);
 
-        let wallShape3 = new CANNON.Box(new CANNON.Vec3(10, 10, 0.5));
-        let wallBody3 = new CANNON.Body({ mass: 0
-        ,collisionFilterGroup:2 });
-        wallBody3.addShape(wallShape3);
-        wallBody3.position.set(0, 0, 10);
-        world.addBody(wallBody3);
+        const wallRight = new CANNON.Body(options);
+        wallRight.addShape(verticalWall);
+        wallRight.position.set(10, 0, 0);
+        this.world.addBody(wallRight);
 
-        let wallShape4 = new CANNON.Box(new CANNON.Vec3(10, 10, 0.5));
-        let wallBody4 = new CANNON.Body({ mass: 0 });
-        wallBody4.addShape(wallShape4);
-        wallBody4.position.set(0, 0, -10);
-        world.addBody(wallBody4);
+        const wallFront = new CANNON.Body(options);
+        wallFront.addShape(horizontalWall);
+        wallFront.position.set(0, 0, 10);
+        this.world.addBody(wallFront);
+
+        const wallBack = new CANNON.Body(options);
+        wallBack.addShape(horizontalWall);
+        wallBack.position.set(0, 0, -10);
+        this.world.addBody(wallBack);
     }
 
     setGeometry()
@@ -94,5 +96,6 @@ export default class Floor
         world.addBody(this.body);
         this.body.quaternion.setFromAxisAngle(new CANNON.Vec3(- 1, 0, 0), Math.PI * 0.5)
 
+        this.setWalls()
     }
 }

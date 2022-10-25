@@ -25,16 +25,20 @@ export default class World
             this.environment = new Environment()
             this.player = new Player();
             Enemy.setPlayer(this.player);
-            this.enemyHorizontal = new EnemyHorizontal();
-            this.enemyVertical = new EnemyVertical();
-            setInterval(() => {
-                Enemy.shoot(this.enemyHorizontal)
-                Enemy.shoot(this.enemyVertical)
-            }, 2*1000);
-
-
+            this.initEnemies();
 
         })
+    }
+
+    initEnemies() {
+        this.enemyHorizontal = new EnemyHorizontal();
+        this.enemyVertical = new EnemyVertical();
+        setInterval(() => {
+            Enemy.shoot(this.enemyHorizontal)
+        }, this.enemyHorizontal.getShootingDelay());
+        setInterval(() => {
+            Enemy.shoot(this.enemyVertical)
+        }, this.enemyVertical.getShootingDelay());
     }
 
     update()

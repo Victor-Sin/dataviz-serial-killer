@@ -3,6 +3,7 @@ import Enemy from "./Enemy";
 import * as CANNON from "cannon-es";
 import getPhysicBody from "../../../Utils/PhysicBody";
 import { Clock } from 'three';
+import BodyTypes from "../../../Utils/BodyTypes";
 
 export default class EnemyHorizontal extends Enemy
 {
@@ -10,10 +11,11 @@ export default class EnemyHorizontal extends Enemy
     body;
     mesh;
     shootingDelay = 1;
+    orientation = 'x';
+
     constructor()
     {
         super();
-
         // Debug
         if(this.debug.active)
         {
@@ -21,40 +23,20 @@ export default class EnemyHorizontal extends Enemy
             this.debugFolder.close();
             this.setGui()
         }
-        this.clock = new THREE.Clock();
         this.setMesh();
-        this.enemyHorizontalMove();
-
         this.scene.add(this.mesh)
-        // setTimeout( () => this.shoot(this),this.shootingDelay*1000)
     }
 
-    enemyHorizontalMove(){
-        const playerBody = Enemy.player.body;
-        console.log(playerBody.position.x);
-        const enemyBody = this.body;
-        let delta = this.clock.getDelta();
-        let playerBodyX = new THREE.Vector3(playerBody.position.x, enemyBody.position.y, enemyBody.position.z);
-        enemyBody.position.copy(playerBodyX);
-        // console.log(enemyBody.position);
-    
-       
-      
-    }
 
     setMesh(){
         this.material = new THREE.MeshBasicMaterial();
         this.mesh = new THREE.Mesh(Enemy._geometry, this.material);
         this.mesh.position.set(0, 1, -10);
-        // this.mesh.visible = false;
-
 
         getPhysicBody(this,{
             mass: 1000,
             type: 2,
-            collisionFilterGroup: 3,
-            collisionFilterMask: 4,
-
+            collisionFilterMask:  BodyTypes.NONE
         });
     }
 
@@ -68,6 +50,5 @@ export default class EnemyHorizontal extends Enemy
     update()
     {
         super.update();
-        this.enemyHorizontalMove();
     }
 }

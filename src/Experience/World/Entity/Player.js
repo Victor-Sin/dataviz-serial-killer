@@ -2,24 +2,18 @@ import * as THREE from 'three'
 import Experience from '../../Experience'
 import getPhysicBody from "../../Utils/PhysicBody";
 import * as CANNON from "cannon-es";
-import { Clock } from 'three';
 import THREEx from "../../Utils/keyboard";
+import BodyTypes from "../../Utils/BodyTypes";
+import Entity from "./Entity";
 
 console.log(THREEx);
-export default class Player {
+export default class Player extends Entity {
     dashCooldown = 5;
     health = 4;
     velocity = 1000;
 
     constructor() {
-        this.experience = new Experience()
-        this.scene = this.experience.scene
-        this.resources = this.experience.resources
-        this.time = this.experience.time
-        this.debug = this.experience.debug
-        this.world = this.experience.physic.world
-    
-        this.clock = new THREE.Clock();
+        super();
         this.keyboard = new THREEx.KeyboardState();
 
         this.setMesh();
@@ -48,8 +42,8 @@ export default class Player {
             mass:40,
             fixedRotation : true,
             linearDamping : 0.85,
-            collisionFilterGroup: 2,
-            collisionFilterMask: 1
+            collisionFilterGroup: BodyTypes.PLAYER,
+            collisionFilterMask:  BodyTypes.BULLETS | BodyTypes.OTHERS
 
         });
 

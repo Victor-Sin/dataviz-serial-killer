@@ -1,13 +1,13 @@
 import * as THREE from 'three'
 import Experience from '../../Experience'
-import Enemy from "./Enemies/Enemy";
 import getPhysicBody from "../../Utils/PhysicBody";
 import EnemyVertical from "./Enemies/EnemyVertical";
 import * as CANNON from "cannon-es";
+import BodyTypes from "../../Utils/BodyTypes";
+import Entity from "./Entity";
 
 
-export default class Bullet
-{
+export default class Bullet extends Entity {
     static bullets = [];
     static bulletFolder;
     static folderBulletSet = false;
@@ -21,15 +21,7 @@ export default class Bullet
 
     constructor(enemy = false)
     {
-        this.experience = new Experience()
-        this.scene = this.experience.scene
-        this.resources = this.experience.resources
-        this.time = this.experience.time
-        this.debug = this.experience.debug
-        this.world = this.experience.physic.world
-        this.physic = this.experience.physic
-
-
+        super();
         this.enemy = enemy;
 
         this.setMesh();
@@ -41,7 +33,7 @@ export default class Bullet
                 Bullet.bulletFolder = this.debug.ui.addFolder('bullets');
                 Bullet.folderBulletSet = true;
                 this.setGui();
-            };
+            }
         }
 
         Bullet.bullets.push(this)
@@ -68,8 +60,9 @@ export default class Bullet
 
         this.index = getPhysicBody(this,{
             mass: 0.01,
-            collisionFilterGroup: 1,
-            collisionFilterMask: 2
+            collisionFilterGroup: BodyTypes.BULLETS,
+            collisionFilterMask:  BodyTypes.PLAYER | BodyTypes.OTHERS
+
         },'','bullet');
         this.setImpulsion()
     }
@@ -105,11 +98,11 @@ export default class Bullet
         let impulse;
         if(this.enemy instanceof EnemyVertical){
              topPoint = new CANNON.Vec3(widthThisMesh, 0, 0)
-             impulse = new CANNON.Vec3(-Bullet.force*1/60,0 , 0)
+             impulse = new CANNON.Vec3(-Bullet.force/60,0 , 0)
         }
         else{
              topPoint = new CANNON.Vec3(0, 0, depthThisMesh)
-             impulse = new CANNON.Vec3(0,0, Bullet.force*1/60)
+             impulse = new CANNON.Vec3(0,0, Bullet.force/60)
         }
         this.body.applyForce(impulse,topPoint)
 

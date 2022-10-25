@@ -1,30 +1,26 @@
 import * as THREE from 'three'
-import Experience from '../../../Experience'
 import Bullet from "../Bullet";
+import Entity from "../Entity";
 
-export default class Enemy
-{
-    static bombCooldown = 5;
-    static blocCooldown = 5;
+export default class Enemy extends Entity {
+    //GUI Attributes
     static enemiesFolder;
     static folderEnemiesSet = false;
+    //SETTER Attributes
     static geometry;
     static player;
+    //GAME Attributes
+    static bombCooldown = 5;
+    static blocCooldown = 5;
     force = 5;
     mesh;
     material;
+    orientation;
+    shootingDelay;
 
     constructor()
     {
-        this.experience = new Experience()
-        this.scene = this.experience.scene
-        this.resources = this.experience.resources
-        this.time = this.experience.time
-        this.debug = this.experience.debug
-        this.world = this.experience.physic.world;
-        this.physic = this.experience.physic;
-
-
+        super();
         // Debug
         if(this.debug.active)
         {
@@ -49,11 +45,21 @@ export default class Enemy
     }
 
     static shoot(enemy){
-        const bullet = new Bullet(enemy);
+        return new Bullet(enemy);
     }
 
     static  setPlayer(player){
         this.player = player;
+    }
+
+    enemyMove(){
+        const playerBodyPosition = Enemy.player.body.position;
+        const enemyBodyPosition = this.body.position;
+        enemyBodyPosition[this.orientation] = playerBodyPosition[this.orientation];
+    }
+
+    getShootingDelay(){
+        return this.shootingDelay*1000;
     }
 
     update()
@@ -61,6 +67,7 @@ export default class Enemy
         if(this.body && this.mesh){
             this.mesh.position.copy(this.body.position)
             this.mesh.quaternion.copy(this.body.quaternion)
+            this.enemyMove()
         }
     }
 }

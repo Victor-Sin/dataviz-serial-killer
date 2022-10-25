@@ -1,14 +1,14 @@
 import * as THREE from 'three'
 import Enemy from "./Enemy";
 import getPhysicBody from "../../../Utils/PhysicBody";
-import * as CANNON from "cannon-es";
-import { Clock } from 'three';
+import BodyTypes from "../../../Utils/BodyTypes";
 
 export default class EnemyVertical extends Enemy
 {
     body;
     shape;
-    shootingDelay = 0.33;
+    shootingDelay = 1.33;
+    orientation = 'z';
     constructor(name)
     {
         super(name);
@@ -22,11 +22,8 @@ export default class EnemyVertical extends Enemy
             this.setGui();
 
         }
-        this.clock = new THREE.Clock();
-
 
         this.setMesh();
-        this.enemyVerticalMove();
         this.scene.add(this.mesh)
     }
 
@@ -40,21 +37,9 @@ export default class EnemyVertical extends Enemy
         getPhysicBody(this,{
             mass: 1000,
             type: 2,
-        });
-    }
+            collisionFilterMask:  BodyTypes.NONE
 
-    
-    enemyVerticalMove(){
-        const playerBody = Enemy.player.body;
-        // console.log(playerBody.position.x);
-        const enemyBody = this.body;
-        console.log(enemyBody.position);
-        let delta = this.clock.getDelta();
-        let playerBodyZ = new THREE.Vector3(enemyBody.position.x, enemyBody.position.y, playerBody.position.z);
-        enemyBody.position.copy(playerBodyZ);
-    
-       
-      
+        });
     }
 
     setGui(){
@@ -67,7 +52,5 @@ export default class EnemyVertical extends Enemy
     update()
     {
         super.update();
-        this.enemyVerticalMove();
-
     }
 }
