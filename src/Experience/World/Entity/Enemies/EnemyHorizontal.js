@@ -34,7 +34,10 @@ export default class EnemyHorizontal extends Enemy
         // this.mesh.visible = false;
 
 
-        getPhysicBody(this);
+        getPhysicBody(this,{
+            mass: 1000,
+            type: 2,
+        });
     }
 
     setGui(){

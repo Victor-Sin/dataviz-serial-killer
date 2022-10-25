@@ -26,10 +26,11 @@ export default class World
             this.enemyHorizontal = new EnemyHorizontal();
             this.enemyVertical = new EnemyVertical();
             this.player = new Player();
-            // setInterval(() => {
-            //     Enemy.shoot(this.enemyHorizontal)
-            //     // Enemy.shoot(this.enemyVertical)
-            // }, 2*1000);
+            Enemy.setPlayer(this.player);
+            setInterval(() => {
+                Enemy.shoot(this.enemyHorizontal)
+                Enemy.shoot(this.enemyVertical)
+            }, 2*1000);
 
 
 

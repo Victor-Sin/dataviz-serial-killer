@@ -9,6 +9,7 @@ console.log(THREEx);
 export default class Player {
     dashCooldown = 5;
     health = 4;
+    velocity = 1000;
 
     constructor() {
         this.experience = new Experience()
@@ -38,12 +39,19 @@ export default class Player {
 
     setMesh() {
 
-        this.geometry = new THREE.BoxGeometry(1.5, 1.75, 1.5);
+        this.geometry = new THREE.BoxGeometry(1.5, 2, 1.5);
         this.material = new THREE.MeshBasicMaterial();
         this.mesh = new THREE.Mesh(this.geometry, this.material);
         this.mesh.position.set(0, 1, 0);
 
-        getPhysicBody(this, 1);
+        getPhysicBody(this, {
+            mass:40,
+            fixedRotation : true,
+            linearDamping : 0.85,
+            collisionFilterGroup: 2,
+            collisionFilterMask: 1
+
+        });
 
     }
     setGui() {
@@ -52,55 +60,38 @@ export default class Player {
             this.debugFolder.add(this.body.position, 'x', -10, 10, 0.01)
             this.debugFolder.add(this.body.position, 'y', -10, 10, 0.01)
             this.debugFolder.add(this.body.position, 'z', -10, 10, 0.01)
+            this.debugFolder.add(this, 'velocity', 0, 15, 0.01)
         }
     }
     
     setPlayerController() {
+
         let delta = this.clock.getDelta();
-        let moveDistance = 12 * delta;
+        let moveDistance = this.velocity * delta;
+        let topPoint = new CANNON.Vec3(0, 0, 0);
+        let impulse;
+
 
         if (this.keyboard.pressed("left") || this.keyboard.pressed("q")) {
-            this.body.position.x -= moveDistance;
+            impulse = new CANNON.Vec3(-moveDistance,- 9.82*delta, 0)
+            this.body.applyImpulse(impulse,topPoint)
+            // this.body.position.x -= 12*delta;
         }
         if (this.keyboard.pressed("right") || this.keyboard.pressed("d")) {
-            this.body.position.x += moveDistance;   
+            impulse = new CANNON.Vec3(moveDistance,- 9.82*delta, 0)
+            this.body.applyImpulse(impulse,topPoint)
+            // this.body.position.x += moveDistance;
         }
         if (this.keyboard.pressed("up") || this.keyboard.pressed("z")) {
-            this.body.position.z -= moveDistance;
+            impulse = new CANNON.Vec3(0,- 9.82*delta, -moveDistance)
+            this.body.applyImpulse(impulse,topPoint)
+            // this.body.position.z -= moveDistance;
         }
         if (this.keyboard.pressed("down") || this.keyboard.pressed("s")) {
-            this.body.position.z += moveDistance;
+            impulse = new CANNON.Vec3(0,- 9.82*delta, moveDistance)
+            this.body.applyImpulse(impulse,topPoint)
+            // this.body.position.z += moveDistance;
         }
-
-
-    
-        // document.addEventListener('keydown', (event) => {
-        //     switch (event.key) {
-        //         case 'ArrowUp':
-        //         case 'z':
-        //             this.body.position.z -= moveDistance;
-        //             break;
-        //         case 'ArrowDown':
-        //         case 's':
-        //             this.body.position.z += moveDistance;
-        //             break;
-        //         case 'ArrowLeft':
-        //         case 'q':
-        //             this.body.position.x -= moveDistance;
-        //             break;
-        //         case 'ArrowRight':
-        //         case 'd':
-        //             this.body.position.x += moveDistance;
-        //             break;
-
-        //         default:
-        //             break;
-        //     }
-        // });
-
-
-
-
     }
 
     update() {

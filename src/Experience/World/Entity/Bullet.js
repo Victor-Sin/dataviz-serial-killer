@@ -12,7 +12,7 @@ export default class Bullet
     static bulletFolder;
     static folderBulletSet = false;
     static meshGlobal;
-    static force = 1000;
+    static force = 200;
     toRemove = false;
     mesh ;
     enemy = null; //Objet appartient à la classe Enemy
@@ -66,7 +66,11 @@ export default class Bullet
         this.mesh = Bullet.meshGlobal.clone();
         this.setOrigin();
 
-        this.index = getPhysicBody(this,1,'','bullet');
+        this.index = getPhysicBody(this,{
+            mass: 0.01,
+            collisionFilterGroup: 1,
+            collisionFilterMask: 2
+        },'','bullet');
         this.setImpulsion()
     }
 
@@ -107,10 +111,7 @@ export default class Bullet
              topPoint = new CANNON.Vec3(0, 0, depthThisMesh)
              impulse = new CANNON.Vec3(0,0, Bullet.force*1/60)
         }
-        if(this.body){
-
-        }
-        this.body.applyImpulse(impulse,topPoint)
+        this.body.applyForce(impulse,topPoint)
 
         this.eventCollider = this.body.addEventListener("collide", (e) => {
             // console.log(e.contact.bj.material.name)

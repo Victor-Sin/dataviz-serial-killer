@@ -33,7 +33,10 @@ export default class EnemyVertical extends Enemy
         this.mesh.rotation.y = Math.PI * 0.5;
         // this.mesh.visible = false;
 
-        getPhysicBody(this);
+        getPhysicBody(this,{
+            mass: 1000,
+            type: 2,
+        });
     }
 
     setGui(){

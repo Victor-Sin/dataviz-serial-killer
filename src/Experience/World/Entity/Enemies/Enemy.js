@@ -9,6 +9,7 @@ export default class Enemy
     static enemiesFolder;
     static folderEnemiesSet = false;
     static geometry;
+    static player;
     force = 5;
     mesh;
     material;
@@ -47,6 +48,10 @@ export default class Enemy
 
     static shoot(enemy){
         const bullet = new Bullet(enemy);
+    }
+
+    static  setPlayer(player){
+        this.player = player;
     }
 
     update()
