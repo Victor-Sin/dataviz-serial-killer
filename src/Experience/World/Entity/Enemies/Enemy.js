@@ -67,7 +67,7 @@ export default class Enemy extends Entity {
         if(this.body && this.mesh){
             this.mesh.position.copy(this.body.position)
             this.mesh.quaternion.copy(this.body.quaternion)
-            // this.enemyMove()
+            this.enemyMove()
         }
     }
 }

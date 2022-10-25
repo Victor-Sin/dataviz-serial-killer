@@ -33,17 +33,17 @@ export default class Player extends Entity {
 
     setMesh() {
 
-        this.geometry = new THREE.BoxGeometry(1.5, 2, 1.5);
+        this.geometry = new THREE.SphereGeometry(1.5, 50, 50);
         this.material = new THREE.MeshBasicMaterial();
         this.mesh = new THREE.Mesh(this.geometry, this.material);
-        this.mesh.position.set(0, 1, 0);
+        this.mesh.position.set(0, 1.5, 0);
 
         getPhysicBody(this, {
             mass:40,
             fixedRotation : true,
             linearDamping : 0.85,
             collisionFilterGroup: BodyTypes.PLAYER,
-            collisionFilterMask:  BodyTypes.BULLETS_1 | BodyTypes.BULLETS_2 | BodyTypes.OTHERS
+            collisionFilterMask: BodyTypes.BULLETS | BodyTypes.OTHERS
 
         });
 

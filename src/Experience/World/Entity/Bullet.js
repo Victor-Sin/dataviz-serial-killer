@@ -12,7 +12,7 @@ export default class Bullet extends Entity {
     static bulletFolder;
     static folderBulletSet = false;
     static meshGlobal;
-    static force = 200;
+    static force = 30;
     toRemove = false;
     mesh ;
     enemy = null; //Objet appartient à la classe Enemy
@@ -57,14 +57,12 @@ export default class Bullet extends Entity {
         }
         this.mesh = Bullet.meshGlobal.clone();
         this.setOrigin();
-        const instanceVertical = this.enemy instanceof EnemyVertical
-        this.selfGroup = instanceVertical ? BodyTypes.BULLETS_1 : BodyTypes.BULLETS_2;
-        this.filterGroup = instanceVertical ? BodyTypes.BULLETS_2 : BodyTypes.BULLETS_1;
 
+        this.instanceVertical = this.enemy instanceof EnemyVertical
         this.index = getPhysicBody(this,{
             mass: 0.01,
-            collisionFilterGroup: this.selfGroup,
-            collisionFilterMask: this.selfGroup | BodyTypes.PLAYER | BodyTypes.OTHERS
+            collisionFilterGroup: BodyTypes.BULLETS,
+            collisionFilterMask:  BodyTypes.PLAYER | BodyTypes.OTHERS
         },'','bullet');
         this.setImpulsion()
     }
@@ -109,7 +107,7 @@ export default class Bullet extends Entity {
         this.body.applyForce(impulse,topPoint)
 
         this.eventCollider = this.body.addEventListener("collide", (e) => {
-            if(e.contact.bj.collisionFilterGroup !== this.filterGroup)
+            if(e.body.collisionFilterGroup !== BodyTypes.BULLETS)
             this.toRemove = true;
 
         })

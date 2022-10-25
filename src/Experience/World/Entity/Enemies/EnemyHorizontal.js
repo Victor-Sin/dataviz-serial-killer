@@ -8,7 +8,7 @@ export default class EnemyHorizontal extends Enemy
     shape;
     body;
     mesh;
-    shootingDelay = 2;
+    shootingDelay = 1;
     orientation = 'x';
 
     constructor()

@@ -7,7 +7,7 @@ export default class EnemyVertical extends Enemy
 {
     body;
     shape;
-    shootingDelay = 1.33;
+    shootingDelay = 1;
     orientation = 'z';
     constructor(name)
     {
