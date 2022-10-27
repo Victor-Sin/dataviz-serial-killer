@@ -33,7 +33,7 @@ export default class Player extends Entity {
 
     setMesh() {
 
-        this.geometry = new THREE.SphereGeometry(1.5, 50, 50);
+        this.geometry = new THREE.BoxGeometry(1.5, 2, 1.5);
         this.material = new THREE.MeshBasicMaterial();
         this.mesh = new THREE.Mesh(this.geometry, this.material);
         this.mesh.position.set(0, 1.5, 0);

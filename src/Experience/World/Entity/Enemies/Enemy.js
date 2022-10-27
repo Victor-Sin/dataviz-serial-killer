@@ -1,6 +1,7 @@
 import * as THREE from 'three'
 import Bullet from "../Bullet";
 import Entity from "../Entity";
+import {lerp} from "../../../Utils/Utils";
 
 export default class Enemy extends Entity {
     //GUI Attributes
@@ -55,7 +56,19 @@ export default class Enemy extends Entity {
     enemyMove(){
         const playerBodyPosition = Enemy.player.body.position;
         const enemyBodyPosition = this.body.position;
-        enemyBodyPosition[this.orientation] = playerBodyPosition[this.orientation];
+        let lerpPlayerBody = new THREE.Vector3();
+
+        for (const [key, value] of Object.entries(lerpPlayerBody)) {
+            if(key == this.orientation){
+                lerpPlayerBody[key] = lerp(enemyBodyPosition[key], playerBodyPosition[key], this.clock.getDelta() * 1)
+            }
+            else{
+                lerpPlayerBody[key] = enemyBodyPosition[key];
+            }
+
+        }
+
+        enemyBodyPosition.copy(lerpPlayerBody);
     }
 
     getShootingDelay(){

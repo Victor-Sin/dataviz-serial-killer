@@ -23,13 +23,14 @@ export default class EnemyHorizontal extends Enemy
         }
         this.setMesh();
         this.scene.add(this.mesh)
+
     }
 
 
     setMesh(){
         this.material = new THREE.MeshBasicMaterial();
         this.mesh = new THREE.Mesh(Enemy._geometry, this.material);
-        this.mesh.position.set(0, 1, -10);
+        this.mesh.position.set(5, 1, -10);
 
         getPhysicBody(this,{
             mass: 1000,
@@ -48,5 +49,6 @@ export default class EnemyHorizontal extends Enemy
     update()
     {
         super.update();
+
     }
 }
