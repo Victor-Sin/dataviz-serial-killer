@@ -12,7 +12,7 @@ export default class Bullet extends Entity {
     static bulletFolder;
     static folderBulletSet = false;
     static meshGlobal;
-    static force = 30;
+    static force = 300;
     toRemove = false;
     mesh ;
     enemy = null; //Objet appartient à la classe Enemy

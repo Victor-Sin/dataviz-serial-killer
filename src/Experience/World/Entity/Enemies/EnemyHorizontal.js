@@ -8,7 +8,7 @@ export default class EnemyHorizontal extends Enemy
     shape;
     body;
     mesh;
-    shootingDelay = 1;
+    shootingDelay = 0.3;
     orientation = 'x';
 
     constructor()
@@ -23,6 +23,7 @@ export default class EnemyHorizontal extends Enemy
         }
         this.setMesh();
         this.scene.add(this.mesh)
+        this.initRayCaster()
 
     }
 
@@ -33,9 +34,10 @@ export default class EnemyHorizontal extends Enemy
         this.mesh.position.set(5, 1, -10);
 
         getPhysicBody(this,{
-            mass: 1000,
-            type: 2,
-            collisionFilterMask:  BodyTypes.NONE
+            mass: 35,
+            collisionFilterMask:  BodyTypes.NONE,
+            linearDamping : 0.25,
+
         });
     }
 
@@ -44,6 +46,10 @@ export default class EnemyHorizontal extends Enemy
             this.debugFolder.add(this,'force',0,10,0.1)
             this.debugFolder.add(this,'shootingDelay',0,5,0.01);
         }
+    }
+
+    static getInstance(){
+        return this;
     }
 
     update()

@@ -7,7 +7,7 @@ export default class EnemyVertical extends Enemy
 {
     body;
     shape;
-    shootingDelay = 1;
+    shootingDelay = 0.3;
     orientation = 'z';
     constructor(name)
     {
@@ -25,6 +25,8 @@ export default class EnemyVertical extends Enemy
 
         this.setMesh();
         this.scene.add(this.mesh)
+        this.initRayCaster()
+
     }
 
     setMesh(){
@@ -35,9 +37,10 @@ export default class EnemyVertical extends Enemy
         // this.mesh.visible = false;
 
         getPhysicBody(this,{
-            mass: 1000,
-            type: 2,
-            collisionFilterMask:  BodyTypes.NONE
+            mass: 35,
+            collisionFilterMask:  BodyTypes.NONE,
+            linearDamping : 0.1,
+
 
         });
     }

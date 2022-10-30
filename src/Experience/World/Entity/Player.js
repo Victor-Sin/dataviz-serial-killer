@@ -26,7 +26,6 @@ export default class Player extends Entity {
 
         }
 
-
         this.scene.add(this.mesh)
         this.setPlayerController()
     }
@@ -90,7 +89,6 @@ export default class Player extends Entity {
             this.mesh.quaternion.copy(this.body.quaternion)
 
         }
-
         this.setPlayerController()
     }
 }

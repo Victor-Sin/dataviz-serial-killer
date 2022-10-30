@@ -1,7 +1,8 @@
 import * as THREE from 'three'
 import Bullet from "../Bullet";
 import Entity from "../Entity";
-import {lerp} from "../../../Utils/Utils";
+import {inInterval, lerp} from "../../../Utils/Utils";
+import * as CANNON from "cannon-es";
 
 export default class Enemy extends Entity {
     //GUI Attributes
@@ -13,11 +14,13 @@ export default class Enemy extends Entity {
     //GAME Attributes
     static bombCooldown = 5;
     static blocCooldown = 5;
-    force = 5;
+    force = 100;
     mesh;
     material;
     orientation;
     shootingDelay;
+    raycaster;
+    intersections;
 
     constructor()
     {
@@ -36,6 +39,23 @@ export default class Enemy extends Entity {
         if(!Enemy._geometry){
             Enemy._geometry = new THREE.BoxGeometry(2,1,1)
         }
+        this.raycaster = new THREE.Raycaster()
+
+
+    }
+
+    initRayCaster(){
+        const rayOrigin = this.mesh.position
+        const rayDirection = new THREE.Vector3(0, 0, 0)
+        const directionShoot =
+            this.orientation === 'z' ? 'x' : 'z'
+        rayDirection[directionShoot] =
+            this.orientation === 'z' ?  -10 : 10
+
+        rayDirection.normalize()
+
+        this.raycaster.set(rayOrigin, rayDirection)
+        // this.intersections = this.raycaster.intersectObject(Enemy.player.mesh)
 
     }
 
@@ -49,26 +69,35 @@ export default class Enemy extends Entity {
         return new Bullet(enemy);
     }
 
-    static  setPlayer(player){
+    static setPlayer(player){
         this.player = player;
+
     }
 
     enemyMove(){
-        const playerBodyPosition = Enemy.player.body.position;
-        const enemyBodyPosition = this.body.position;
-        let lerpPlayerBody = new THREE.Vector3();
+        const playerBody = Enemy.player.body;
+        const enemyBody = this.body;
+        const delta =this.clock.getDelta()
+        const moveDirection =
+            playerBody.position[this.orientation] > enemyBody.position[this.orientation] ?
+            1 : -1;
 
-        for (const [key, value] of Object.entries(lerpPlayerBody)) {
-            if(key == this.orientation){
-                lerpPlayerBody[key] = lerp(enemyBodyPosition[key], playerBodyPosition[key], this.clock.getDelta() * 1)
-            }
-            else{
-                lerpPlayerBody[key] = enemyBodyPosition[key];
-            }
+        const centerGravity = new CANNON.Vec3(0, 0, 0);
+        let impulse = new CANNON.Vec3(0,0,0);
 
+        const min = playerBody.position[this.orientation] -  0.1;
+        const max = playerBody.position[this.orientation] +  0.1
+
+        impulse[this.orientation] = moveDirection * this.force * delta;
+
+        if(this.intersections.length > 0 ){
+            const pointColision = this.intersections[0].point[this.orientation];
+            if(inInterval(pointColision,min,max))
+            enemyBody.velocity = new CANNON.Vec3(0,0,0);
         }
-
-        enemyBodyPosition.copy(lerpPlayerBody);
+        else{
+            enemyBody.applyImpulse(impulse,centerGravity);
+        }
     }
 
     getShootingDelay(){
@@ -80,7 +109,15 @@ export default class Enemy extends Entity {
         if(this.body && this.mesh){
             this.mesh.position.copy(this.body.position)
             this.mesh.quaternion.copy(this.body.quaternion)
+
+            if(Enemy.player){
+                this.intersections = this.raycaster.intersectObject(Enemy.player.mesh)
+            }
+            this.raycaster.ray.origin.copy(this.body.position)
+
             this.enemyMove()
+
         }
+
     }
 }

@@ -3,7 +3,7 @@ import Experience from '../Experience.js'
 
 export default class Fox
 {
-    constructor()
+    constructor(enemy)
     {
         this.experience = new Experience()
         this.scene = this.experience.scene

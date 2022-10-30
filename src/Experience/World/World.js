@@ -10,6 +10,8 @@ import Enemy from "./Entity/Enemies/Enemy";
 
 export default class World
 {
+
+
     constructor()
     {
         this.experience = new Experience()
@@ -21,32 +23,30 @@ export default class World
         {
             // Setup
             this.floor = new Floor()
-            // this.fox = new Fox()
             this.environment = new Environment()
             this.player = new Player();
-            Enemy.setPlayer(this.player);
             this.initEnemies();
-
         })
     }
 
     initEnemies() {
+
         this.enemyHorizontal = new EnemyHorizontal();
-        this.enemyVertical = new EnemyVertical()
+        this.enemyVertical = new EnemyVertical();
 
-        setInterval(() => {
-            Enemy.shoot(this.enemyHorizontal)
-        }, this.enemyHorizontal.getShootingDelay());
+        Enemy.setPlayer(this.player);
 
-        setInterval(() => {
-            Enemy.shoot(this.enemyVertical)
-        }, this.enemyVertical.getShootingDelay());
+        // setInterval(() => {
+        //     Enemy.shoot(this.enemyHorizontal)
+        // }, this.enemyHorizontal.getShootingDelay());
+        //
+        // setInterval(() => {
+        //     Enemy.shoot(this.enemyVertical)
+        // }, this.enemyVertical.getShootingDelay());
     }
 
     update()
     {
-        if(this.fox)
-            this.fox.update();
         if(Bullet.bullets.length > 0){
             Bullet.bullets.forEach(bullet =>{
                     bullet.update()
