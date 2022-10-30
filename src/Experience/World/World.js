@@ -30,34 +30,34 @@ export default class World
     }
 
     initEnemies() {
-
         this.enemyHorizontal = new EnemyHorizontal();
         this.enemyVertical = new EnemyVertical();
 
         Enemy.setPlayer(this.player);
 
-        // setInterval(() => {
-        //     Enemy.shoot(this.enemyHorizontal)
-        // }, this.enemyHorizontal.getShootingDelay());
-        //
-        // setInterval(() => {
-        //     Enemy.shoot(this.enemyVertical)
-        // }, this.enemyVertical.getShootingDelay());
+        setInterval(() => {
+            Enemy.shoot(this.enemyHorizontal)
+        }, this.enemyHorizontal.getShootingDelay());
+
+        setInterval(() => {
+            Enemy.shoot(this.enemyVertical)
+        }, this.enemyVertical.getShootingDelay());
     }
 
     update()
     {
-        if(Bullet.bullets.length > 0){
-            Bullet.bullets.forEach(bullet =>{
-                    bullet.update()
-                }
-            )
+        if(!document.hidden){
+            if(Bullet.bullets.length > 0){
+                Bullet.bullets.forEach(bullet => bullet.update()
+                )
+            }
+            if(this.enemyHorizontal)
+                this.enemyHorizontal.update()
+            if(this.enemyVertical)
+                this.enemyVertical.update()
+            if(this.player)
+                this.player.update()
         }
-        if(this.enemyHorizontal)
-            this.enemyHorizontal.update()
-        if(this.enemyVertical)
-            this.enemyVertical.update()
-        if(this.player)
-            this.player.update()
+
     }
 }

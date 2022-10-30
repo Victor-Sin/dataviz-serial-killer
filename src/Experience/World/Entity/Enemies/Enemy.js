@@ -14,13 +14,14 @@ export default class Enemy extends Entity {
     //GAME Attributes
     static bombCooldown = 5;
     static blocCooldown = 5;
-    force = 100;
+    force = 150;
     mesh;
     material;
     orientation;
     shootingDelay;
     raycaster;
     intersections;
+    isShooting = false;
 
     constructor()
     {
@@ -40,8 +41,15 @@ export default class Enemy extends Entity {
             Enemy._geometry = new THREE.BoxGeometry(2,1,1)
         }
         this.raycaster = new THREE.Raycaster()
+    }
 
+    static shoot(enemy){
+        if(enemy.isShooting && !document.hidden)
+            return new Bullet(enemy);
+    }
 
+    static setPlayer(player){
+        this.player = player;
     }
 
     initRayCaster(){
@@ -55,23 +63,12 @@ export default class Enemy extends Entity {
         rayDirection.normalize()
 
         this.raycaster.set(rayOrigin, rayDirection)
-        // this.intersections = this.raycaster.intersectObject(Enemy.player.mesh)
-
     }
 
 
     setGuiGlobal(){
         Enemy.enemiesFolder.add(Enemy,'bombCooldown',0,10,1)
         Enemy.enemiesFolder.add(Enemy,'blocCooldown',0,10,1)
-    }
-
-    static shoot(enemy){
-        return new Bullet(enemy);
-    }
-
-    static setPlayer(player){
-        this.player = player;
-
     }
 
     enemyMove(){
@@ -85,18 +82,29 @@ export default class Enemy extends Entity {
         const centerGravity = new CANNON.Vec3(0, 0, 0);
         let impulse = new CANNON.Vec3(0,0,0);
 
-        const min = playerBody.position[this.orientation] -  0.1;
-        const max = playerBody.position[this.orientation] +  0.1
+        const min = playerBody.position[this.orientation] -  0.5;
+        const max = playerBody.position[this.orientation] +  0.5;
 
         impulse[this.orientation] = moveDirection * this.force * delta;
 
+        //Arrête le mouvement si le joueur entre dans le raycast de l'ennemie
         if(this.intersections.length > 0 ){
             const pointColision = this.intersections[0].point[this.orientation];
-            if(inInterval(pointColision,min,max))
-            enemyBody.velocity = new CANNON.Vec3(0,0,0);
+            if(inInterval(pointColision,min,max)){
+                enemyBody.velocity = new CANNON.Vec3(0,0,0);
+                this.isShooting = true;
+            }
         }
         else{
-            enemyBody.applyImpulse(impulse,centerGravity);
+            if(this.isShooting){
+                setTimeout(() => {
+                    this.isShooting = false;
+                    enemyBody.applyImpulse(impulse,centerGravity);
+                },this.getShootingDelay()*3)
+            }
+            else{
+                enemyBody.applyImpulse(impulse,centerGravity);
+            }
         }
     }
 
@@ -116,7 +124,6 @@ export default class Enemy extends Entity {
             this.raycaster.ray.origin.copy(this.body.position)
 
             this.enemyMove()
-
         }
 
     }
