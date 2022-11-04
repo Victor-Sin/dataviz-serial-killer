@@ -10,6 +10,7 @@ export default class Entity {
         this.debug = this.experience.debug
         this.world = this.experience.physic.world
         this.clock = new THREE.Clock();
-
+        this.camera = this.experience.camera.instance
+        
     }
 }
