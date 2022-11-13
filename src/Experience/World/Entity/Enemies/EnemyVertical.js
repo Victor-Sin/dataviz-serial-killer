@@ -1,15 +1,15 @@
-import * as THREE from 'three'
+import {Mesh,MeshBasicMaterial} from 'three'
 import Enemy from "./Enemy";
 import getPhysicBody from "../../../Utils/PhysicBody";
 import BodyTypes from "../../../Utils/BodyTypes";
 
 export default class EnemyVertical extends Enemy
 {
-    body;
-    shape;
-    shootingDelay = 0.15;
-    orientation = 'z';
-    force = 150;
+    _shootingDelay = 0.15;
+    _orientation = 'z';
+    _force = 150;
+    #debugFolder;
+
     constructor(name)
     {
         super(name);
@@ -17,39 +17,36 @@ export default class EnemyVertical extends Enemy
         // Debug
         if(this.debug.active)
         {
-            if(Enemy.enemiesFolder)  this.debugFolder = Enemy.enemiesFolder.addFolder('EnemyVertical');
-            this.debugFolder.close();
+            if(Enemy._enemiesFolder)  this.#debugFolder = Enemy._enemiesFolder.addFolder('EnemyVertical');
+            this.#debugFolder.close();
 
-            this.setGui();
+            this.#setGui();
 
         }
 
-        this.setMesh();
-        this.scene.add(this.mesh)
-        this.initRayCaster()
+        this.#setMesh();
+        this.scene.add(this._mesh)
+        this._initRayCaster()
 
     }
 
-    setMesh(){
-        this.material = new THREE.MeshBasicMaterial();
-        this.mesh = new THREE.Mesh(Enemy._geometry, this.material);
-        this.mesh.position.set(10, 1, 0);
-        this.mesh.rotation.y = Math.PI * 0.5;
-        // this.mesh.visible = false;
+    #setMesh(){
+        this._material = new MeshBasicMaterial();
+        this._mesh = new Mesh(Enemy._geometry, this._material);
+        this._mesh.position.set(10, 1, 0);
+        this._mesh.rotation.y = Math.PI * 0.5;
 
         getPhysicBody(this,{
             mass: 35,
             collisionFilterMask:  BodyTypes.NONE,
             linearDamping : 0.1,
-
-
         });
     }
 
-    setGui(){
-        if(this.debugFolder){
-            this.debugFolder.add(this,'force',0,10,0.1)
-            this.debugFolder.add(this,'shootingDelay',0,5,0.01);
+    #setGui(){
+        if(this.#debugFolder){
+            this.#debugFolder.add(this,'_force',0,10,0.1)
+            this.#debugFolder.add(this,'_shootingDelay',0,5,0.01);
         }
     }
 

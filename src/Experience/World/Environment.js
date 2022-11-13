@@ -1,4 +1,4 @@
-import * as THREE from 'three'
+import {DirectionalLight,sRGBEncoding,Mesh,MeshStandardMaterial} from 'three'
 import Experience from '../Experience.js'
 
 export default class Environment
@@ -24,7 +24,7 @@ export default class Environment
 
     setSunLight()
     {
-        this.sunLight = new THREE.DirectionalLight('#ffffff', 4)
+        this.sunLight = new DirectionalLight('#ffffff', 4)
         this.sunLight.castShadow = true
         this.sunLight.shadow.camera.far = 15
         this.sunLight.shadow.mapSize.set(1024, 1024)
@@ -70,7 +70,7 @@ export default class Environment
         this.environmentMap = {}
         this.environmentMap.intensity = 0.4
         this.environmentMap.texture = this.resources.items.environmentMapTexture
-        this.environmentMap.texture.encoding = THREE.sRGBEncoding
+        this.environmentMap.texture.encoding = sRGBEncoding
         
         this.scene.environment = this.environmentMap.texture
 
@@ -78,7 +78,7 @@ export default class Environment
         {
             this.scene.traverse((child) =>
             {
-                if(child instanceof THREE.Mesh && child.material instanceof THREE.MeshStandardMaterial)
+                if(child instanceof Mesh && child.material instanceof MeshStandardMaterial)
                 {
                     child.material.envMap = this.environmentMap.texture
                     child.material.envMapIntensity = this.environmentMap.intensity

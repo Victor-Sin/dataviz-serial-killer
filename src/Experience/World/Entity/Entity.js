@@ -1,7 +1,13 @@
 import Experience from "../../Experience";
-import * as THREE from "three";
+import {Clock} from "three";
 
 export default class Entity {
+    _body;
+    _shape;
+    _mesh;
+    _material;
+    _geometry;
+
     constructor() {
         this.experience = new Experience()
         this.scene = this.experience.scene
@@ -9,8 +15,47 @@ export default class Entity {
         this.time = this.experience.time
         this.debug = this.experience.debug
         this.world = this.experience.physic.world
-        this.clock = new THREE.Clock();
+        this.clock = new Clock();
         this.camera = this.experience.camera.instance
-        
+    }
+
+    getMesh(){
+        return this._mesh;
+    }
+
+    setMesh(mesh){
+        this._mesh = mesh;
+    }
+
+    getGeometry(){
+        return this._geometry;
+    }
+
+    setGeometry(geometry){
+        this._geometry = geometry;
+    }
+
+    getMaterial(){
+        return this._material;
+    }
+
+    setMaterial(material){
+        this._material = material;
+    }
+
+    getBody(){
+        return this._body;
+    }
+
+    setBody(body){
+        this._body = body;
+    }
+
+    getShape(){
+        return this._shape;
+    }
+
+    setShape(shape){
+        this._shape = shape;
     }
 }

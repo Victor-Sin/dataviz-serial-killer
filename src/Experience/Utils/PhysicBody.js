@@ -1,5 +1,5 @@
-import * as CANNON from "cannon-es";
-import * as THREE from "three";
+import {Body,Material,Box,Sphere,Cylinder,Vec3} from "cannon-es";
+import {BoxGeometry,SphereGeometry,CylinderGeometry} from "three";
 import BodyTypes from "./BodyTypes";
 
 /**
@@ -11,19 +11,19 @@ import BodyTypes from "./BodyTypes";
  * @param materialName
  */
 export default function getPhysicBody(self, propetiesObj = {mass: 1},geometryName = '',materialName = 'default') {
-    self.shape = createShape(self.mesh.geometry,geometryName)
-    self.body =  new CANNON.Body({
-        position: self.mesh.position.clone(),
-        shape : self.shape,
-        material: new CANNON.Material(materialName),
+    self.setShape(createShape(self.getMesh().geometry,geometryName));
+    self.setBody(new Body({
+        position: self.getMesh().position.clone(),
+        shape : self.getShape(),
+        material: new Material(materialName),
         collisionFilterGroup: BodyTypes.OTHERS,
         ...propetiesObj,
 
-    })
+    }));
 
-    self.body.quaternion.copy(self.mesh.quaternion)
+    self.getBody().quaternion.copy(self.getMesh().quaternion)
 
-    self.world.addBody(self.body);
+    self.world.addBody(self.getBody());
 }
 
 /**
@@ -35,16 +35,16 @@ export default function getPhysicBody(self, propetiesObj = {mass: 1},geometryNam
  * @returns {module:shapes/Shape.Shape}
  */
 function createShape(geometry,geometryName = ''){
-    if(geometry instanceof THREE.BoxGeometry || geometryName === "Box"){
+    if(geometry instanceof BoxGeometry || geometryName === "Box"){
         const {width : x, height: y , depth : z} = geometry.parameters;
-        return  new CANNON.Box(new CANNON.Vec3(x/2,y/2,z/2));
+        return  new Box(new Vec3(x/2,y/2,z/2));
     }
-    else if(geometry instanceof THREE.SphereGeometry || geometryName === "Sphere"){
+    else if(geometry instanceof SphereGeometry || geometryName === "Sphere"){
         const {radius} = geometry.parameters;
-        return  new CANNON.Sphere(radius);
+        return  new Sphere(radius);
     }
-    else if(geometry instanceof THREE.CylinderGeometry || geometryName === "Cylinder"){
+    else if(geometry instanceof CylinderGeometry || geometryName === "Cylinder"){
         const {radiusTop, radiusBottom, height, radialSegments } = geometry.parameters;
-        return new CANNON.Cylinder(radiusTop,radiusBottom,height,radialSegments)
+        return new Cylinder(radiusTop,radiusBottom,height,radialSegments)
     }
 }
