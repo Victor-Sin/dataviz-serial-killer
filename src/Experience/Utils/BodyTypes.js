@@ -8,6 +8,7 @@ const bodyTypes = {
     BULLETS :pow2(2),
     BOMBS: pow2(3),
     OBSTACLES : pow2(4),
+    BLOCK : pow2(5),
     OTHERS : pow2(20),
 }
 

@@ -42,7 +42,7 @@ export default class Player extends Entity {
             fixedRotation : true,
             linearDamping : 0.85,
             collisionFilterGroup: BodyTypes.PLAYER,
-            collisionFilterMask: BodyTypes.BULLETS | BodyTypes.OTHERS
+            collisionFilterMask: BodyTypes.BULLETS | BodyTypes.OTHERS | BodyTypes.OBSTACLES
 
         });
 

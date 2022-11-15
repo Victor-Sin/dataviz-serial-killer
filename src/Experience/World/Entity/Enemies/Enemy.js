@@ -125,7 +125,7 @@ export default class Enemy extends Entity {
 
             if(Enemy._player){
                 this.#intersections = this.#raycaster.intersectObject(Enemy._player.getMesh());
-                console.log(Enemy._player.getMesh())
+                
             }
             this.#raycaster.ray.origin.copy(this._body.position)
 

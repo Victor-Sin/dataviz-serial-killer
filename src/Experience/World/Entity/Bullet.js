@@ -58,7 +58,7 @@ export default class Bullet extends Entity {
         this.index = getPhysicBody(this,{
             mass: 0.01,
             collisionFilterGroup: BodyTypes.BULLETS,
-            collisionFilterMask:  BodyTypes.PLAYER | BodyTypes.OTHERS
+            collisionFilterMask:  BodyTypes.PLAYER | BodyTypes.OBSTACLES | BodyTypes.OTHERS
         },'','bullet');
         this.#setImpulsion()
     }
