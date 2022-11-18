@@ -77,9 +77,11 @@ export default class ClickBlock extends Entity {
         this.#blockPlaceholder.getMesh().position.set(this.#intersects[0].point.x, 1.5, this.#intersects[0].point.z)
       } else {
         this.#blockPlaceholder.getMesh().visible = false;
+        
       }
       // this.#blockPlaceholder.getMesh().position.set(this.#mouseVec3.x, 1.5, this.#mouseVec3.z)
       // this.#blockPlaceholder.getMesh().position.set(this.#mouseVec3.x, 1, this.#mouseVec3.z)
+      // this.#canPose = true;
     })
   }
 
@@ -90,17 +92,25 @@ export default class ClickBlock extends Entity {
         this.block = new Block({ vector3: this.#intersectsVec3 })
         this.#blockBody = this.block.getBody();
         this.block.setColliderEvent(this.#blockBody.addEventListener('collide', (e) => {
-          console.log("collide");
-          // if (e.body === this.#blockPlaceholderBody) {
-
-          //   this.#canPose = false;
-          //   console.log('true');
-
-          // }
+          if (e.body === this.#blockPlaceholderBody) {
+            this.#canPose = false;
+            console.log("collide");
+          }
         }))
+        this.world.addEventListener('endContact', (e) => {
+          if (e.bodyA === this.#blockBody || e.bodyB === this.#blockBody
+            && e.bodyA === this.#blockPlaceholderBody || e.bodyB === this.#blockPlaceholderBody) {
+            this.#canPose = true;
+            console.log("bodyA: " + e.bodyA,"bodyB: " + e.bodyB);
+          }
+  
+        })
+
         this.#blockPlaceholder.getMesh().visible = false;
-        this.#canPose = false;
+        // this.#canPose = false;
+        console.log(this.#canPose);
       }
+   
     })
   }
 

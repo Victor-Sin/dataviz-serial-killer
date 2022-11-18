@@ -31,8 +31,9 @@ export default class Block extends Entity {
   }
 
   setMesh({ width, depth, vector3, opacity }) {
-    let filterMask = bodyTypes.PLAYER | bodyTypes.BULLETS | bodyTypes.OTHERS;
-    let filterGroup =  bodyTypes.OTHERS
+    let filterMask =  bodyTypes.PLACEHOLDER|  bodyTypes.PLAYER | bodyTypes.BULLETS | bodyTypes.OTHERS;
+    let filterGroup =  bodyTypes.OBSTACLES
+    let type = 2;
     
     if (!Block.#meshGlobal) {
       const geometry = new BoxGeometry(width, 2, depth);
@@ -46,16 +47,19 @@ export default class Block extends Entity {
       this._mesh.visible = false;
       this._mesh.material.opacity = opacity;
       this._mesh.material.transparent = true;
-      filterMask = -1
-      filterGroup = bodyTypes.NONE
+      filterMask = -1;
+      filterGroup = bodyTypes.PLACEHOLDER;
+      type = 1
+
     }
     this._mesh.position.set(vector3.x, 1.5, vector3.z)
     getPhysicBody(this, {
       mass: 40000,
       fixedRotation: true,
-      // collisionFilterMask: filterMask,
-      type: 2,
-      collisionFilterGroup: filterGroup
+      collisionFilterMask: filterMask,
+      collisionFilterGroup: filterGroup,
+      type: type,
+      isTrigger: true
     });
 
   }
