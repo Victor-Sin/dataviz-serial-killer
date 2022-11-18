@@ -77,7 +77,7 @@ export default class ClickBlock extends Entity {
         this.#blockPlaceholder.getMesh().position.set(this.#intersects[0].point.x, 1.5, this.#intersects[0].point.z)
       } else {
         this.#blockPlaceholder.getMesh().visible = false;
-        
+
       }
       // this.#blockPlaceholder.getMesh().position.set(this.#mouseVec3.x, 1.5, this.#mouseVec3.z)
       // this.#blockPlaceholder.getMesh().position.set(this.#mouseVec3.x, 1, this.#mouseVec3.z)
@@ -98,19 +98,20 @@ export default class ClickBlock extends Entity {
           }
         }))
         this.world.addEventListener('endContact', (e) => {
-          if (e.bodyA === this.#blockBody || e.bodyB === this.#blockBody
-            && e.bodyA === this.#blockPlaceholderBody || e.bodyB === this.#blockPlaceholderBody) {
+          const blockBodyCheck = e.bodyA === this.#blockBody || e.bodyB === this.#blockBody;
+          const blockPlaceholderBodyCheck = e.bodyA === this.#blockPlaceholderBody || e.bodyB === this.#blockPlaceholderBody
+          if (blockBodyCheck && blockPlaceholderBodyCheck) {
             this.#canPose = true;
-            console.log("bodyA: " + e.bodyA,"bodyB: " + e.bodyB);
+            console.log("bodyA: " + e.bodyA, "bodyB: " + e.bodyB);
           }
-  
+
         })
 
         this.#blockPlaceholder.getMesh().visible = false;
         // this.#canPose = false;
         console.log(this.#canPose);
       }
-   
+
     })
   }
 
