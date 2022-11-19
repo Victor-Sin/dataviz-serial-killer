@@ -94,6 +94,7 @@ export default class ClickBlock extends Entity {
         this.block.setColliderEvent(this.#blockBody.addEventListener('collide', (e) => {
           if (e.body === this.#blockPlaceholderBody) {
             this.#canPose = false;
+            console.log("collide");
           }
         }))
         this.world.addEventListener('endContact', (e) => {
@@ -101,13 +102,14 @@ export default class ClickBlock extends Entity {
           const blockPlaceholderBodyCheck = e.bodyA === this.#blockPlaceholderBody || e.bodyB === this.#blockPlaceholderBody
           if (blockBodyCheck && blockPlaceholderBodyCheck) {
             this.#canPose = true;
-            console.log(e.bodyA, e.bodyB);
+            console.log("bodyA: " + e.bodyA, "bodyB: " + e.bodyB);
           }
 
         })
 
         this.#blockPlaceholder.getMesh().visible = false;
         // this.#canPose = false;
+        console.log(this.#canPose);
       }
 
     })
