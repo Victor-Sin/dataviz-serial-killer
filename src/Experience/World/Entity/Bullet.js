@@ -4,6 +4,7 @@ import EnemyVertical from "./Enemies/EnemyVertical";
 import {Vec3} from "cannon-es";
 import BodyTypes from "../../Utils/BodyTypes";
 import Entity from "./Entity";
+import EnemyHorizontal from "./Enemies/EnemyHorizontal";
 
 
 export default class Bullet extends Entity {
@@ -11,15 +12,22 @@ export default class Bullet extends Entity {
     static #bulletFolder;
     static #folderBulletSet = false;
     static #meshGlobal;
-    static #force = 300;
+    static #force = 150;
     #toRemove = false;
     #eventCollider;
+    #topPoint;
+    #impulse;
+    #orientation;
+    #depthEnemy;
+    #radiusEnemy;
+    #widthThisMesh;
     _enemy = null; //Objet appartient à la classe Enemy
 
-    constructor(_enemy)
+    constructor(_enemy,orientation = null)
     {
         super();
         this._enemy = _enemy;
+        this.#orientation = orientation;
 
         this.#setMesh();
 
@@ -58,7 +66,8 @@ export default class Bullet extends Entity {
         this.index = getPhysicBody(this,{
             mass: 0.01,
             collisionFilterGroup: BodyTypes.BULLETS,
-            collisionFilterMask:  BodyTypes.PLAYER | BodyTypes.OBSTACLES | BodyTypes.OTHERS
+            collisionFilterMask:  BodyTypes.PLAYER | BodyTypes.OBSTACLES | BodyTypes.OTHERS,
+            angularFactor: new Vec3(0,0,0)
         },'','bullet');
         this.#setImpulsion()
     }
@@ -69,45 +78,71 @@ export default class Bullet extends Entity {
      */
     #setOrigin(){
         const {x,y,z } = this._enemy.getMesh().position.clone();
-        const depthEnemy = this._enemy.getMesh().geometry.parameters.depth/2;
-        const widthThisMesh = this._mesh.geometry.parameters.width/2;
-        const posX = this._enemy instanceof EnemyVertical ? x - depthEnemy - widthThisMesh -0.1   : x;
+        this.#depthEnemy = this._enemy.getMesh().geometry.parameters.depth/2;
+        this.#widthThisMesh = this._mesh.geometry.parameters.width/2;
+        this.#radiusEnemy = this._enemy.getMesh().geometry.parameters.radiusTop
+        let posX;
         const posY = y
-        const posZ = this._enemy instanceof EnemyVertical ? z  : z + depthEnemy + widthThisMesh +0.1;
+        let posZ;
 
-
+        if(this._enemy instanceof EnemyVertical){
+            posX = x - this.#depthEnemy - this.#widthThisMesh -0.1;
+            posZ = z;
+            this._mesh.rotation.z = Math.PI;
+        }
+        else if(this._enemy instanceof EnemyHorizontal){
+            posX = x;
+            posZ = z + this.#depthEnemy + this.#widthThisMesh +0.1;
+            this._mesh.rotation.y = Math.PI/2;
+        }
+        else if(this.#orientation){
+            const xFact = this.#orientation.x;
+            const yFact = this.#orientation.z;
+            //Factorisation Math 3eme
+            posX = x + xFact * (this.#radiusEnemy+ this.#widthThisMesh + 0.1);
+            posZ = z + yFact * (this.#radiusEnemy + this.#widthThisMesh + 0.1);
+            this._mesh.rotation.y = Math.atan2(yFact,-xFact);
+        }
 
         this._mesh.position.set(posX,posY,posZ);
 
-        if(this._enemy instanceof EnemyVertical){
-            this._mesh.rotation.z = Math.PI;
-        }
-        else{
-            this._mesh.rotation.y = Math.PI/2;
-        }
     }
+
 
     #setImpulsion(){
         const widthThisMesh = this._mesh.geometry.parameters.width/2;
         const depthThisMesh = this._mesh.geometry.parameters.depth/2;
-        let topPoint;
-        let impulse;
-        if(this._enemy instanceof EnemyVertical){
-             topPoint = new Vec3(widthThisMesh, 0, 0)
-             impulse = new Vec3(-Bullet.#force/60,0 , 0)
-        }
-        else{
-             topPoint = new Vec3(0, 0, depthThisMesh)
-             impulse = new Vec3(0,0, Bullet.#force/60)
-        }
-        this._body.applyForce(impulse,topPoint)
+
+        this.#shootEnemies(widthThisMesh,depthThisMesh);
+        this.#shootTurret(widthThisMesh,depthThisMesh);
+
+        this._body.applyForce(this.#impulse,this.#topPoint)
 
         this.#eventCollider = this._body.addEventListener("collide", (e) => {
             if(e.body.collisionFilterGroup !== BodyTypes.BULLETS)
             this.#toRemove = true;
 
         })
+    }
 
+    #shootEnemies(widthThisMesh,depthThisMesh){
+        if(this._enemy instanceof EnemyVertical){
+            this.#topPoint = new Vec3(widthThisMesh, 0, 0)
+            this.#impulse = new Vec3(-Bullet.#force/60,0 , 0)
+        }
+        else if (this._enemy instanceof EnemyHorizontal){
+            this.#topPoint = new Vec3(0, 0, depthThisMesh)
+            this.#impulse = new Vec3(0,0, Bullet.#force/60)
+        }
+    }
+
+    #shootTurret(widthThisMesh,depthThisMesh){
+        if(this.#orientation){
+            const x = this.#orientation.x;
+            const z = this.#orientation.z;
+            this.#topPoint = new Vec3(widthThisMesh*x,0,depthThisMesh*z);
+            this.#impulse = new Vec3((Bullet.#force/60)*x,0, (Bullet.#force/60)*z)
+        }
     }
 
     update()

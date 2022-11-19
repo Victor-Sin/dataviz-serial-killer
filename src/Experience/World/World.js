@@ -10,6 +10,7 @@ import Bomb from "./Entity/Bomb";
 import Block from "./Entity/Block";
 import ClickBlock from "./GameUi/ClickBlock";
 import {Vector3} from "three";
+import Turret from "./Entity/Enemies/Turret";
 
 export default class World
 {
@@ -35,6 +36,7 @@ export default class World
     initEnemies() {
         this.enemyHorizontal = new EnemyHorizontal();
         this.enemyVertical = new EnemyVertical();
+        this.turret = new Turret();
 
         Enemy.setPlayer(this.player);
 
@@ -45,6 +47,10 @@ export default class World
         setInterval(() => {
             Enemy.shoot(this.enemyVertical)
         }, this.enemyVertical.getShootingDelay());
+
+        setInterval(()=>{
+            this.turret.shoot()
+        },this.turret.getShootingDelay());
     }
 
     update()
