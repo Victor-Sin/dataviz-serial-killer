@@ -7,6 +7,8 @@ import bodyTypes from '../../Utils/BodyTypes';
 export default class Block extends Entity {
   static #meshGlobal;
   static blocks = [];
+  #toRemove = false;
+  #eventCollider
   #basicParams = {
     width: 1,
     depth: 1,
@@ -18,6 +20,7 @@ export default class Block extends Entity {
 
   constructor(params = { width: 1, depth: 1, vector3: new Vector3(0, 0, 0), opacity: 1 }) {
     super();
+    this.composer = this.experience.composer
     params = { ...this.#basicParams, ...params };
     this.setMesh(params);
     Block.blocks.push(this)
@@ -50,7 +53,7 @@ export default class Block extends Entity {
       filterMask = -1;
       filterGroup = bodyTypes.PLACEHOLDER;
       type = 1
-
+      this.composer.addSelectedObject(this._mesh)
     }
     this._mesh.position.set(vector3.x, 1.5, vector3.z)
     getPhysicBody(this, {
@@ -70,6 +73,15 @@ export default class Block extends Entity {
     if (this._body && this._mesh) {
       this._body.position.copy(this._mesh.position)
       this._body.quaternion.copy(this._mesh.quaternion)
+    }
+    if(this.#toRemove){
+      this.world.removeBody(this._body);
+      this._body.removeEventListener('collide',this.#eventCollider)
+
+      this.scene.remove(this._mesh)
+      this._mesh.material.dispose()
+      this._mesh.geometry.dispose()
+      this.composer.removeSelectedObject(this._mesh)
 
     }
   }

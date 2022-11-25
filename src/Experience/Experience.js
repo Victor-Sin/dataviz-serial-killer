@@ -11,6 +11,7 @@ import Physic from './Physic/Physic'
 
 import sources from './sources.js'
 import Stats from "stats.js";
+import Composer from "./Composer";
 
 let instance = null
 
@@ -41,7 +42,8 @@ export default class Experience
         this.renderer = new Renderer()
         this.world = new World()
         this.physic = new Physic();
-        this.stats = new Stats()
+        this.stats = new Stats();
+        this.composer = new Composer();
         this.stats.showPanel(0) // 0: fps, 1: ms, 2: mb, 3+: custom
         document.body.appendChild(this.stats.dom)
 
@@ -69,8 +71,9 @@ export default class Experience
         this.stats.begin()
         this.camera.update()
         this.world.update()
-        this.renderer.update()
+        // this.renderer.update()
         this.physic.update()
+        this.composer.update()
         this.stats.end()
     }
 
