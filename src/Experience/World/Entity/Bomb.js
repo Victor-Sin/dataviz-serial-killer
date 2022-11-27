@@ -48,7 +48,7 @@ export default class Bomb extends Entity {
                 this.#removeMeshes();
 
                 this.#eventCollider = this._body.addEventListener("collide", (e) => {
-                    console.log("hell")
+                   
                     console.log(e.body.collisionFilterGroup, e.body.collisionFilterGroup === BodyTypes.PLAYER)
                 })
                 setTimeout(() => {

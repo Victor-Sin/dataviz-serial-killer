@@ -23,8 +23,9 @@ export default [
         path: 'textures/dirt/normal.jpg'
     },
     {
-        name: 'foxModel',
+        name: 'robotModel',
         type: 'gltfModel',
-        path: 'models/Fox/glTF/Fox.gltf'
-    }
+        path: 'models/Robot/robot1.glb'
+    },
+   
 ]

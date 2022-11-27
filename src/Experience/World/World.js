@@ -11,6 +11,7 @@ import Block from "./Entity/Block";
 import ClickBlock from "./GameUi/ClickBlock";
 import {Vector3} from "three";
 import Turret from "./Entity/Enemies/Turret";
+import Fox from './Fox.js';
 
 export default class World
 {
@@ -30,6 +31,7 @@ export default class World
           this.bomb = new Bomb(new Vector3(10,0,10));
           this.blockPlaceholder = new Block({ opacity: 0.25 });
           this.clickBlock = new ClickBlock(this.blockPlaceholder);
+          
         })
   }
 

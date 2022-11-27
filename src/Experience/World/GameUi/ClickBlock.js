@@ -1,6 +1,7 @@
 import { Vector3, Vector2, Raycaster, PlaneGeometry, Mesh, MeshBasicMaterial } from 'three'
 import Block from '../Entity/Block'
 import Entity from '../Entity/Entity';
+import Floor from '../Floor';
 
 export default class ClickBlock extends Entity {
   #blockPlaceholder;
@@ -34,13 +35,11 @@ export default class ClickBlock extends Entity {
   }
 
   createBlock() {
-    this.#blockFloor = new Mesh(
-      new PlaneGeometry(17.5, 17.5),
-      new MeshBasicMaterial({ color: 0x000000, transparent: true })
-    )
-    this.#blockFloor.rotation.x = Math.PI * -0.5;
-    this.#blockFloor.position.set(0, 0.001, 0);
-    this.scene.add(this.#blockFloor)
+    this.blockFloor = Floor.blockFloor;
+    
+    this.blockFloor.visible = false;
+    this.blockFloor.rotation.x = Math.PI * -0.5;
+    this.blockFloor.position.set(0, 0.01, 0);
 
   }
 
@@ -61,7 +60,7 @@ export default class ClickBlock extends Entity {
   handleMouseMove() {
     window.addEventListener('mousemove', (e) => {
 
-      this.#intersects = this.#raycaster.intersectObject(this.#blockFloor);
+      this.#intersects = this.#raycaster.intersectObject(this.blockFloor);
 
       this.#mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
       this.#mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;

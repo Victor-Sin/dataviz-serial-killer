@@ -1,13 +1,12 @@
-import {Mesh,PlaneGeometry,sRGBEncoding,RepeatWrapping,MeshStandardMaterial} from 'three'
+import { Mesh, PlaneGeometry, sRGBEncoding, RepeatWrapping, MeshStandardMaterial,MeshBasicMaterial  } from 'three'
 import Experience from '../Experience.js'
 import * as CANNON from 'cannon-es';
 import BodyTypes from "../Utils/BodyTypes";
 
-export default class Floor
-{
+export default class Floor {
+    static blockFloor;
     shape;
-    constructor()
-    {
+    constructor() {
         this.experience = new Experience()
         this.scene = this.experience.scene
         this.resources = this.experience.resources
@@ -18,16 +17,17 @@ export default class Floor
         this.setTextures()
         this.setMaterial()
         this.setMesh()
+        this.setBlockFloor()
     }
 
-    setWalls(){
+    setWalls() {
         //INIT
         const options = {
             mass: 0,
             collisionFilterGroup: BodyTypes.OTHERS,
         };
-        const horizontalWall =  new CANNON.Box(new CANNON.Vec3(10, 10, 0.1));
-        const verticalWall =  new CANNON.Box(new CANNON.Vec3(0.1, 10, 10));
+        const horizontalWall = new CANNON.Box(new CANNON.Vec3(10, 10, 0.1));
+        const verticalWall = new CANNON.Box(new CANNON.Vec3(0.1, 10, 10));
 
         const wallLeft = new CANNON.Body(options);
         wallLeft.addShape(verticalWall);
@@ -50,13 +50,11 @@ export default class Floor
         this.world.addBody(wallBack);
     }
 
-    setGeometry()
-    {
-        this.geometry = new PlaneGeometry(20, 20 )
+    setGeometry() {
+        this.geometry = new PlaneGeometry(20, 20)
     }
 
-    setTextures()
-    {
+    setTextures() {
         this.textures = {}
 
         this.textures.color = this.resources.items.grassColorTexture
@@ -71,16 +69,14 @@ export default class Floor
         this.textures.normal.wrapT = RepeatWrapping
     }
 
-    setMaterial()
-    {
+    setMaterial() {
         this.material = new MeshStandardMaterial({
             map: this.textures.color,
             normalMap: this.textures.normal
         })
     }
 
-    setMesh()
-    {
+    setMesh() {
         this.mesh = new Mesh(this.geometry, this.material)
         this.mesh.rotation.x = - Math.PI * 0.5
         this.mesh.receiveShadow = true
@@ -97,5 +93,20 @@ export default class Floor
         this.body.quaternion.setFromAxisAngle(new CANNON.Vec3(- 1, 0, 0), Math.PI * 0.5)
 
         this.setWalls()
+    }
+
+    setBlockFloor() {
+        const floorGeometry = this.geometry;
+        const floorWith = floorGeometry.parameters.width;
+        const floorHeight = floorGeometry.parameters.height;
+        Floor.blockFloor = new Mesh(
+            new PlaneGeometry(floorWith * 0.875, floorHeight * 0.875),
+            new MeshBasicMaterial({ color: 0x000000, transparent: true })
+        )
+     
+       
+        this.scene.add(Floor.blockFloor)
+
+
     }
 }
