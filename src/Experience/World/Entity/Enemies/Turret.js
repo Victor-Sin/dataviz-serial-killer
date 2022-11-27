@@ -58,15 +58,13 @@ export default class Turret extends Entity {
     }
 
     #setMesh(){
-        let filterMask =  bodyTypes.PLACEHOLDER|  bodyTypes.PLAYER | bodyTypes.BULLETS | bodyTypes.OTHERS;
-        let filterGroup =  bodyTypes.OBSTACLES
+        let filterGroup =  bodyTypes.OTHERS
         this._material = new MeshBasicMaterial();
         this._mesh = new Mesh(Turret._geometry, this._material);
         this._mesh.position.set(2, 1, 2);
 
         getPhysicBody(this,{
-            mass: 40000,
-            collisionFilterMask: filterMask,
+            mass: 0,
             collisionFilterGroup: filterGroup,
             type:2
         });

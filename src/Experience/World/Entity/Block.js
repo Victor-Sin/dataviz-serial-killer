@@ -34,8 +34,7 @@ export default class Block extends Entity {
   }
 
   setMesh({ width, depth, vector3, opacity }) {
-    let filterMask =  bodyTypes.PLACEHOLDER|  bodyTypes.PLAYER | bodyTypes.BULLETS | bodyTypes.OTHERS;
-    let filterGroup =  bodyTypes.OBSTACLES
+    let filterGroup =  bodyTypes.OTHERS
     let type = 2;
     
     if (!Block.#meshGlobal) {
@@ -50,16 +49,14 @@ export default class Block extends Entity {
       this._mesh.visible = false;
       this._mesh.material.opacity = opacity;
       this._mesh.material.transparent = true;
-      filterMask = -1;
       filterGroup = bodyTypes.PLACEHOLDER;
       type = 1
       this.composer.addSelectedObject(this._mesh)
     }
     this._mesh.position.set(vector3.x, 1.5, vector3.z)
     getPhysicBody(this, {
-      mass: 40000,
+      mass: 0,
       fixedRotation: true,
-      collisionFilterMask: filterMask,
       collisionFilterGroup: filterGroup,
       type: type,
       isTrigger: true
