@@ -22,7 +22,6 @@ export default class EnemyHorizontal extends Enemy
         }
         this.#setMesh();
         this.scene.add(this._mesh)
-        this._initRayCaster()
 
     }
 

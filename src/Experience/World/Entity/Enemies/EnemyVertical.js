@@ -7,7 +7,7 @@ export default class EnemyVertical extends Enemy
 {
     _shootingDelay = 0.15;
     _orientation = 'z';
-    _force = 150;
+    _force = 50;
     #debugFolder;
 
     constructor(name)
@@ -26,7 +26,6 @@ export default class EnemyVertical extends Enemy
 
         this.#setMesh();
         this.scene.add(this._mesh)
-        this._initRayCaster()
 
     }
 

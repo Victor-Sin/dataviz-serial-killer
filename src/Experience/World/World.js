@@ -44,11 +44,11 @@ export default class World
 
         setInterval(() => {
             Enemy.shoot(this.enemyHorizontal)
-        }, this.enemyHorizontal.getShootingDelay());
+        }, this.enemyHorizontal.getShootingDelay()*3);
 
         setInterval(() => {
             Enemy.shoot(this.enemyVertical)
-        }, this.enemyVertical.getShootingDelay());
+        }, this.enemyVertical.getShootingDelay()*3);
 
         setInterval(()=>{
             this.turret.shoot()
