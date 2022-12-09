@@ -1,22 +1,19 @@
-import { BoxGeometry, MeshBasicMaterial, Mesh } from 'three'
+import { Mesh, CylinderGeometry,MeshStandardMaterial, SpotLight} from 'three'
 import getPhysicBody from "../../Utils/PhysicBody";
-import { Vec3 } from "cannon-es";
-import THREEx from "../../Utils/keyboard";
-import BodyTypes from "../../Utils/BodyTypes";
+
 import Entity from "./Entity";
+import {plasticMaterial} from "../../Physic/Materials";
 
 export default class Player extends Entity {
-    #dashCooldown = 5;
-    #health = 4;
-    #velocity = 1000;
+    lightOn = false;
+    disabled = false;
     #debugFolder;
 
 
-    constructor() {
+    constructor(position,name = "") {
         super();
-        this.keyboard = new THREEx.KeyboardState();
-
-        this.#setMesh();
+        this.#setMesh(position,name);
+        this.#setSpotlight()
 
         // Debug
         if (this.debug.active) {
@@ -25,45 +22,42 @@ export default class Player extends Entity {
             this.#setGui();
 
         }
-
         this.scene.add(this._mesh)
-        this.#setPlayerController()
-    }
-    #setModel() {
-        this.model = this.resources.items.robotModel
-        this.robot = this.model.scene.children[0]
-        this.modelHelisse1 = this.robot.getObjectByName("Object_21")
-        this.modelHelisse2 = this.robot.getObjectByName("Object_23")
-        this.robot.rotation.z = 3 * Math.PI / 2
-        
-        this.robot.scale.set(0.6, 0.6, 0.6)
-        this.scene.add(this.robot)
-        this.robot.traverse((child) => {
-            if (child instanceof Mesh) {
-                child.castShadow = true
-            }
-        })
     }
 
 
-    #setMesh() {
-        this.#setModel();
+    #setSpotlight(){
+        this.spotLight = new SpotLight("#ce7946", 1, 100, Math.PI * 0.1, 0.25, 0.25)
+        this.spotLight.position.set(this._mesh.position.x, 25, this._mesh.position.z)
+        this.spotLight.penumbra = 0.75;
+        this.spotLight.castShadow = true;
+        this.spotLight.shadow.mapSize.width = 1024;
+        this.spotLight.shadow.mapSize.height = 1024;
+        this.spotLight.shadowMapVisible = true;
+        this.spotLight.target = this._mesh
+        this.scene.add(this.spotLight)
+    }
 
-        // this._geometry = this.model;
-        // this._material = new MeshBasicMaterial();
-        this._mesh = this.robot;
 
-        this._mesh.position.set(0, 1.5, 0);
+
+    #setMesh(position,name) {
+
+        const {x,y,z} = position;
+
+        this._geometry = new CylinderGeometry( 1.5, 1.5, 1.5, 32 );
+        this._material = new MeshStandardMaterial();
+        this._mesh = new Mesh(this._geometry,this._material);
+        this._mesh.castShadow = true;
+
+        this._mesh.position.set(x,y,z);
+        this._mesh.rotation.x = ((Math.random()-0.5)*2) * Math.random()*Math.PI/3;
+        this._mesh.name = name
+
 
         getPhysicBody(this, {
             mass: 40,
-            fixedRotation: true,
-            linearDamping: 0.85,
-            collisionFilterGroup: BodyTypes.PLAYER,
-            collisionFilterMask: BodyTypes.BULLETS | BodyTypes.OTHERS | BodyTypes.OBSTACLES
-
-        }, "Box", "default", { width: 2, height: 1.5, depth: 5 });
-        
+            material: plasticMaterial
+        });
     }
 
     #setGui() {
@@ -76,40 +70,11 @@ export default class Player extends Entity {
         }
     }
 
-    #setPlayerController() {
-
-        let delta = this.clock.getDelta();
-        let moveDistance = this.#velocity * delta;
-        let topPoint = new Vec3(0, 0, 0);
-        let impulse;
-
-
-        if (this.keyboard.pressed("left") || this.keyboard.pressed("q")) {
-            impulse = new Vec3(-moveDistance, 0, 0)
-            this._body.applyImpulse(impulse, topPoint)
-        }
-        if (this.keyboard.pressed("right") || this.keyboard.pressed("d")) {
-            impulse = new Vec3(moveDistance, 0, 0)
-            this._body.applyImpulse(impulse, topPoint)
-        }
-        if (this.keyboard.pressed("up") || this.keyboard.pressed("z")) {
-            impulse = new Vec3(0, 0, -moveDistance)
-            this._body.applyImpulse(impulse, topPoint)
-        }
-        if (this.keyboard.pressed("down") || this.keyboard.pressed("s")) {
-            impulse = new Vec3(0, 0, moveDistance)
-            this._body.applyImpulse(impulse, topPoint)
-        }
-    }
 
     update() {
         if (this._body && this._mesh) {
             this._mesh.position.copy(this._body.position)
             this._mesh.quaternion.copy(this._body.quaternion)
-            this.modelHelisse1.rotation.y += 0.5
-            this.modelHelisse2.rotation.y += 0.5
         }
-        this.#setPlayerController()
-
     }
 }

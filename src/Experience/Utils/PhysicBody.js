@@ -16,7 +16,6 @@ export default function getPhysicBody(self, propetiesObj = { mass: 1 }, geometry
         position: self.getMesh().position.clone(),
         shape: self.getShape(),
         material: new Material(materialName),
-        collisionFilterGroup: BodyTypes.OTHERS,
         ...propetiesObj,
 
     }));

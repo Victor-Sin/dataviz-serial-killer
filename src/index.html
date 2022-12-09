@@ -3,10 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@100;200;300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display+SC&display=swap" rel="stylesheet">
     <title>26 - Code structuring</title>
 </head>
 <body>
+        <div class="home">
+            <h2>Trouve le tueur en série grâce aux indices laissés dans la pièce
+                et découvre les chiffres alarmants des tueurs en séries.</h2>
+            <button class="start">Chargement...</button>
+        </div>
+        <div class="focusElts hidden">
+            <button class="close"><i class="fa-solid fa-share"></i></button>
+            <div class="leftInfo">
+                <span class="line">
+                    <span class="subline">
+                        <h1>Victimes <span>?</span></h1>
+                        <p>Il a commis 17 meurtres, tous des hommes</p>
+                    </span>
+                </span>
+            </div>
+            <div class="point"></div>
+            <input type="checkbox" id="cards" name="cards">
+            <label for="cards" class="graphics">
+                <img src="/static/images/Canape.jpg" alt="Graphique: Antécédent Familliale" class="graph Canape round">
+                <img src="/static/images/Ours.jpg" alt="Graphique: Enfance Difficile" class="graph Ours round">
+                <img src="/static/images/VHS.jpg" alt="Graphique: Genre recherché" class="graph VHS round">
+                <img src="/static/images/Billets.jpg" alt="Graphique: Ambition" class="graph Billets round">
+                <img src="/static/images/Couteau.jpg" alt="Graphique: Méthodes" class="graph Couteau round">
+                <img src="/static/images/Calendrier.jpg" alt="Graphique: Activité" class="graph Calendrier round">
+                <img src="/static/images/Documents.jpg" alt="Graphique: Profil type meurtrier" class="graph Documents round">
+                <img src="/static/images/Photo.jpg" alt="Graphique: Genre victimes  " class="graph Photo round">
+            </label>
+        </div>
+        <h1 class="hints">
+            <span class="current">0</span> / 8
+        </h1>
+        <div class="final hidden">
+            <img src="/static/images/final_1.jpg" alt="Ted Bundy" class="round">
+            <img src="/static/images/final_2.jpg" alt="Jeffrey Dahmer" class="round">
+            <div class="finalInfo">
+                <div class="title">
+                    <h1 class="name"></h1>
+                    <p class="subtitle"></p>
+                </div>
+                <p class="primeInfo">
+                </p>
+                <p class="subInfo">
+                </p>
+                <button class="killer hidden">
+                    Decouvrir le tueur
+                </button>
+            </div>
+        </div>
     <canvas class="webgl"></canvas>
-    <div class="blockTrigger"></div>
+    <script src="https://kit.fontawesome.com/0406f3dd90.js" crossorigin="anonymous"></script>
 </body>
 </html>

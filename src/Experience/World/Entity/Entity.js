@@ -15,8 +15,9 @@ export default class Entity {
         this.time = this.experience.time
         this.debug = this.experience.debug
         this.world = this.experience.physic.world
-        this.clock = new Clock();
+        this.globalWorld = this.experience.world
         this.camera = this.experience.camera.instance
+        this.composer = this.experience.composer
     }
 
     getMesh(){

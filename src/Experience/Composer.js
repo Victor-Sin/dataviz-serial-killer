@@ -43,22 +43,26 @@ export default class Composer{
         this.outlinePass.edgeGlow  = 0;
         this.outlinePass.edgeThickness  = 1;
         this.outlinePass.pulsePeriod = 0;
-        this.outlinePass.edgeStrength = 3;
-        this.outlinePass.visibleEdgeColor.set("#ffffff")
-        this.outlinePass.hiddenEdgeColor.set("#000000")
+        this.outlinePass.edgeStrength = 5;
+        this.outlinePass.visibleEdgeColor.set("#6e6e6e")
+        this.outlinePass.hiddenEdgeColor.set("#252525")
 
 
     }
 
     addSelectedObject(object){
-        this.#selectedObjects.push(object)
+        if(!this.#selectedObjects.includes(object)){
+            this.#selectedObjects.splice(0, 1); // 2nd parameter means remove one item only
+                this.#selectedObjects.push(object)
+        }
     }
 
-    removeSelectedObject(object){
-        const index = this.#selectedObjects.indexOf(object);
-        if (index > -1) { // only splice array when item is found
-            this.#selectedObjects.splice(index, 1); // 2nd parameter means remove one item only
-        }
+    removeSelectedObject(){
+            this.#selectedObjects.splice(0, 1); // 2nd parameter means remove one item only
+    }
+
+    selectedObjectsEmpty(){
+        return this.#selectedObjects.length == 0;
     }
 
     update(){

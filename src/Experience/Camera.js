@@ -1,9 +1,10 @@
-import {PerspectiveCamera} from 'three'
+import {PerspectiveCamera, Vector3} from 'three'
 import Experience from './Experience.js'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 
 export default class Camera
 {
+    initPosition = new Vector3(-8, 23, 43);
     constructor()
     {
         this.experience = new Experience()
@@ -17,8 +18,9 @@ export default class Camera
 
     setInstance()
     {
-        this.instance = new PerspectiveCamera(35, this.sizes.width / this.sizes.height, 0.1, 100)
-        this.instance.position.set(0, 20, 30)
+        this.instance = new PerspectiveCamera(75, this.sizes.width / this.sizes.height, 0.1, 100)
+        this.instance.position.set(-8, 23, 43)
+        // this.instance.target.position.y = 15
         this.scene.add(this.instance)
     }
 
@@ -27,6 +29,10 @@ export default class Camera
         this.controls = new OrbitControls(this.instance, this.canvas)
         this.controls.enableDamping = true
         this.controls.enabled = true
+        this.controls.enablePan = false;
+        this.controls.minDistance = 1
+        this.controls.maxDistance = 50
+        this.controls.maxPolarAngle = Math.PI/2 -Math.PI/10
 
     }
 
@@ -38,6 +44,6 @@ export default class Camera
 
     update()
     {
-        // this.controls.update()
+        this.controls.update()
     }
 }

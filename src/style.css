@@ -10,6 +10,12 @@ body
     overflow: hidden;
     height: 100%;
     width: 100%;
+    font-size: 16px;
+}
+
+.hud{
+    display: inline-block;
+    z-index: 2;
 }
 
 .webgl
@@ -18,6 +24,7 @@ body
     top: 0;
     left: 0;
     outline: none;
+    /*filter: grayscale(100%);*/
 }
 .blockTrigger{
   position: absolute;
@@ -29,3 +36,263 @@ body
   background-color: red;
 
 }
+
+.hidden{
+    display: none;
+}
+
+.home{
+    position: absolute;
+    z-index: 2;
+    top: 50%;
+    left: 50%;
+    color:white;
+    font-family: "League Spartan";
+    font-size: 1.5em;
+    text-align: center;
+    transform: translate(-50%,-50%);
+    font-weight: normal;
+}
+
+.home h2{
+    font-weight: lighter;
+}
+
+.start{
+    position:relative;
+    margin-top: 2em;
+    font-size: inherit;
+    font-family: inherit;
+    text-transform: uppercase;
+    color: white;
+    background: none;
+    border: none;
+    pointer-events: none;
+}
+
+.start::after{
+    position: absolute;
+    content: "";
+    bottom: 0%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 0%;
+    height: 1px;
+    background-color: white;
+    transition: all 0.25s ease-out;
+}
+
+.start:hover::after{
+    width: 100%;
+}
+
+.point{
+    position: absolute;
+    background: white;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 10px;
+    height:10px;
+    border-radius: 50%;
+    opacity: 0;
+    z-index: 2;
+}
+
+.leftInfo{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 50vw;
+    transform: translateY(-50%);
+    z-index: 2;
+}
+
+.leftInfo{
+    left: auto;
+    right: 50%;
+}
+
+.leftInfo .line{
+    position: absolute;
+    right: 0;
+    top: 0;
+    transform: translateY(-50%);
+    width: 0%;
+    height:2px;
+    background-color: white;
+    transform-origin: right center;
+    transform: rotateZ(45deg);
+}
+
+.leftInfo .subline{
+    position: absolute;
+    top: 50%;
+    right: 100%;
+    transform-origin: right center;
+    transform: translateY(-50%) rotateZ(-45deg);
+    width: 0%;
+    height: 2px;
+    background-color: white;
+}
+
+.subline h1 {
+    position: absolute;
+    color: white;
+    top: -1.5em;
+    font-size: 2.75em;
+    text-transform: uppercase;
+    font-family: 'Playfair Display SC', serif;
+    opacity: 0;
+}
+
+.subline p {
+    color: white;
+    font-family: 'League Spartan';
+    margin-top: 1em;
+    opacity: 0;
+}
+
+#cards{
+    display: none;
+}
+
+.graphics{
+    position: absolute;
+    z-index: 2;
+    top: 50%;
+    left: 150%;
+    transform: translate(-50%, -50%) rotateZ(-15deg);
+    transition : all 1s ease-in-out;
+}
+
+#cards:checked + .graphics{
+    left: 50% !important;
+    transform: translate(-50%, -50%) rotateZ(0deg);
+
+}
+
+
+.close{
+    position: absolute;
+    top: 1.5em;
+    left: 95%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 3em;
+    font-weight: bold;
+    background-color: transparent;
+    border-radius: 50%;
+    z-index: 2;
+    border: none;
+    opacity: 0;
+}
+
+h1 span{
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    background-color: white;
+    color: black;
+    text-align: center;
+    line-height: 0.8;
+    border-radius: 50%;
+    padding-bottom: 0.025em;
+}
+
+.hints{
+    color: white;
+    position: absolute;
+    bottom: 1em;
+    left:5%;
+    z-index: 2;
+}
+
+.current{
+    line-height: 0.9
+}
+
+
+.final{
+    background: rgba(0,0,0,0.75);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+}
+
+.final img{
+    position: absolute;
+    transform: translate(-50%, -50%);
+    top: 150%;
+    left: 50%;
+    z-index: 2;
+    transition: all 0.25s ease-out
+}
+
+.final img:nth-child(1){
+    left: 20%;
+    transform: translate(-50%, -50%) rotateZ(15deg);
+}
+
+.final img:nth-child(2){
+    left: 60%;
+    transform: translate(-50%, -50%) rotateZ(-15deg);
+}
+
+.final img:hover{
+    transform: translate(-50%,-50%) scale(1.05);
+}
+
+.final .finished:nth-child(1){
+    left: 35% !important;
+    transform: translate(-50%, -50%) rotateZ(-15deg) !important;
+    transition: all 0.5s ease-out !important;
+}
+
+.final .finished:nth-child(2){
+    left: 35% !important;
+    transform: translate(-50%, -50%) rotateZ(0deg) !important;
+    transition: all 0.5s ease-out !important;
+}
+
+.round{
+    border-radius:20px;
+}
+
+.finalInfo{
+    position:absolute;
+    top: 50%;
+    left: 66%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    color: white;
+    font-family: "League Spartan";
+    max-width: 600px;
+}
+
+.title .name{
+    font-size:3.5em;
+    font-family: "Playfair Display SC";
+}
+
+.title .subtitle{
+    font-size: 1.5em;
+}
+
+.primeInfo,.subInfo{
+    font-size: 1.25em;
+}
+
+.primeInfo span{
+    font-weight: bold;
+}
+
+
+.loose{
+    left: 20% !important;
+    top: 200% !important;
+}
+

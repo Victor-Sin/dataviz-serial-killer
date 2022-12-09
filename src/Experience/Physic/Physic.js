@@ -2,6 +2,7 @@ import * as THREE from 'three'
 import Experience from '../Experience.js'
 import * as CANNON from 'cannon-es';
 import CannonDebugger from 'cannon-es-debugger'
+import {concreteMaterial, plasticMaterial} from "./Materials";
 
 
 export default class Physic
@@ -16,14 +17,27 @@ export default class Physic
         this.resources = this.experience.resources
 
         this.world = new CANNON.World();
-        this.world.gravity.set(0,0,0);
+        this.world.gravity.set(0,- 9.82,0);
         this.world.broadphase = new CANNON.SAPBroadphase(this.world)
 
-
+        this.createMaterials();
         this.cannonDebugger = new CannonDebugger(this.scene, this.world, {
             // options...
         })
 
+    }
+
+    createMaterials(){
+
+        const concretePlasticContactMaterial = new CANNON.ContactMaterial(
+            concreteMaterial,
+            plasticMaterial,
+            {
+                friction: 0.1,
+                restitution: 0.45
+            }
+        )
+        this.world.addContactMaterial(concretePlasticContactMaterial)
     }
 
     addObjectToUpdate(object){

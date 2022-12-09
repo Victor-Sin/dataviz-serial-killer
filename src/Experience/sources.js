@@ -13,19 +13,8 @@ export default [
         ]
     },
     {
-        name: 'grassColorTexture',
-        type: 'texture',
-        path: 'textures/dirt/color.jpg'
+        name: 'livingRoomModel',
+        type: 'dracoLoader',
+        path: 'models/LivingRoom/Salles.glb'
     },
-    {
-        name: 'grassNormalTexture',
-        type: 'texture',
-        path: 'textures/dirt/normal.jpg'
-    },
-    {
-        name: 'robotModel',
-        type: 'gltfModel',
-        path: 'models/Robot/robot1.glb'
-    },
-   
 ]

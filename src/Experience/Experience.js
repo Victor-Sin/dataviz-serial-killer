@@ -1,4 +1,4 @@
-import {Scene,Mesh} from 'three'
+import {Scene, Mesh, Fog} from 'three'
 
 import Debug from './Utils/Debug.js'
 import Sizes from './Utils/Sizes.js'
@@ -37,6 +37,7 @@ export default class Experience
         this.sizes = new Sizes()
         this.time = new Time()
         this.scene = new Scene()
+        // this.scene.fog = new Fog('#211d20', 10, 30)
         this.resources = new Resources(sources)
         this.camera = new Camera()
         this.renderer = new Renderer()
@@ -45,7 +46,7 @@ export default class Experience
         this.stats = new Stats();
         this.composer = new Composer();
         this.stats.showPanel(0) // 0: fps, 1: ms, 2: mb, 3+: custom
-        document.body.appendChild(this.stats.dom)
+        // document.body.appendChild(this.stats.dom)
 
         // Resize event
         this.sizes.on('resize', () =>
