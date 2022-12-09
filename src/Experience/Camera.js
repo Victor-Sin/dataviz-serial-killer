@@ -18,7 +18,7 @@ export default class Camera
 
     setInstance()
     {
-        this.instance = new PerspectiveCamera(75, this.sizes.width / this.sizes.height, 0.1, 100)
+        this.instance = new PerspectiveCamera(75, this.sizes.width / this.sizes.height, 0.1, 150)
         this.instance.position.set(-8, 23, 43)
         // this.instance.target.position.y = 15
         this.scene.add(this.instance)
@@ -31,7 +31,7 @@ export default class Camera
         this.controls.enabled = true
         this.controls.enablePan = false;
         this.controls.minDistance = 1
-        this.controls.maxDistance = 50
+        this.controls.maxDistance = 70
         this.controls.maxPolarAngle = Math.PI/2 -Math.PI/10
 
     }

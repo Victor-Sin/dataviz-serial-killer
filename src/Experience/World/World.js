@@ -53,7 +53,7 @@ export default class World
                 intensity: 0
             })
             anim.to(this.livingRoom.pointLight,{
-                intensity: 70,
+                intensity: 50,
                 duration: 5,
                 ease: "power2.easeOut"
             })

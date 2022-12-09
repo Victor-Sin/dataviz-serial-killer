@@ -21,9 +21,9 @@ export default class Physic
         this.world.broadphase = new CANNON.SAPBroadphase(this.world)
 
         this.createMaterials();
-        this.cannonDebugger = new CannonDebugger(this.scene, this.world, {
-            // options...
-        })
+        // this.cannonDebugger = new CannonDebugger(this.scene, this.world, {
+        //     // options...
+        // })
 
     }
 
@@ -53,7 +53,7 @@ export default class Physic
             object.mesh.position.copy(object.body.position)
             object.mesh.quaternion.copy(object.body.quaternion)
         }
-        this.cannonDebugger.update()
+        // this.cannonDebugger.update()
     }
 
 }
